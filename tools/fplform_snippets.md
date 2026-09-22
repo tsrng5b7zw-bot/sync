@@ -51,4 +51,4 @@ const T = Object.fromEntries(d.teams.map(t=>[t.id,t.short_name]));
 d.elements.filter(e => e.cost_change_event !== 0).map(e => `${e.web_name}(${T[e.team]})${e.cost_change_event>0?'+':'-'}${(e.now_cost/10).toFixed(1)}`).join(' | ')
 ```
 
-Price changes land at midnight UK (6 pm Chicago in summer, 6 pm in winter too — UK and Chicago change clocks a week apart, so 7 pm for one week in late October/early November).
+Price changes land at midnight UK time (new for 2026/27; before, it was 1.30 am GMT / 2.30 am BST). That is 6 pm Chicago for most of the season, but 7 pm while only one country has changed its clocks: 25–31 Oct 2026 and 14–27 Mar 2027.
