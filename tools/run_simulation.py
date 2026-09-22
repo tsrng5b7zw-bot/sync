@@ -13,6 +13,9 @@ added), chips still available (both halves of the season handled), banks, and ea
 with Free Hits reverted. FPL shows a Wildcard or transfers made for the next deadline only once
 that deadline passes, so pass your real squad with --my-squad and the chip with --committed until
 then. Keep that file out of the repo: it would show rivals your team before the deadline.
+A committed Bench Boost, Triple Captain or Free Hit is scored in the next gameweek (bench points,
+the captain's points again, or the best one-week squad minus the held one); with a Free Hit,
+--my-squad is the squad you revert to, not the Free Hit squad.
 
 Rival skill (k, good transfers each rival makes over the projection window) moves the answer more
 than anything else, so the report always shows the uniform-k answer, and adds the tiered one when
@@ -24,7 +27,7 @@ Two different questions, answered separately:
               transfers for you: granting them would let a weak squad "fix itself" in the model and
               hide exactly the difference being measured.
 """
-import argparse, json, os, sys
+import argparse, copy, json, os, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fplcommon import Data, Projections, read_squad_file, solve_squad, variance_bands, club_correlation
@@ -60,7 +63,14 @@ def main():
     committed = {}
     for c in a.committed:
         e, chip = c.split(":") if ":" in c else (me, c)
-        committed.setdefault(data.resolve_entry(e), []).append(chip.upper())
+        e, chip = data.resolve_entry(e), chip.upper()
+        if chip not in CHIP_EV:
+            sys.exit(f"--committed {c}: the chip must be one of {', '.join(CHIP_EV)}")
+        if chip not in data.chips_left(e):
+            sys.exit(f"--committed {c}: {names.get(e, e)} has no {chip} left in this half of the season")
+        committed.setdefault(e, []).append(chip)
+    if any(len(v) > 1 for v in committed.values()):
+        sys.exit("--committed: only one chip can be played per gameweek")
 
     order = [str(r["entry"]) for r in data.league]
     row = {str(r["entry"]): r for r in data.league}
@@ -82,7 +92,12 @@ def main():
     left = {e: data.chips_left(e, committed.get(e, ())) for e in order}
     nxt = data.nxt_gw or data.cur_gw
     weeks_in_half = (19 if nxt <= 19 else 38) - nxt + 1      # one chip per gameweek; unused ones expire
-    chips = {e: sum(sorted((CHIP_EV[c] for c in left[e]), reverse=True)[:max(0, weeks_in_half)]) for e in order}
+    # a chip committed for the next deadline occupies that week
+    slots = {e: weeks_in_half - (1 if committed.get(e) else 0) for e in order}
+    chips = {e: sum(sorted((CHIP_EV[c] for c in left[e]), reverse=True)[:max(0, slots[e])]) for e in order}
+    g0 = f"gw{nxt}"
+    if any(c in ("BB", "TC", "FH") for cs in committed.values() for c in cs) and g0 not in proj.gws:
+        print(f"! a committed chip is for GW{nxt}, which the projections do not cover: it is not scored")
     sigma, nweeks = (a.sigma, 0) if a.sigma else data.sigma()
     vb, cc = variance_bands(data), club_correlation(data)
 
@@ -98,7 +113,8 @@ def main():
     print(f"teammate correlation: keeper/defenders {cc['dd']:.2f}, defender-attacker {cc['da']:.2f}, attackers {cc['aa']:.2f}")
     print(f"\n{'manager':24}{'total':>6}{'+subs':>6}{'chips left':>13}{'bank':>6}  squad")
     for e in order:
-        print(f"{nm(e)[:23]:24}{row[e]['total']:>6}{subs[e]:>+6d}{' '.join(left[e]) or '-':>13}{bank[e]:6.1f}  {source[e]}")
+        now = f"  (playing {'+'.join(committed[e])} in GW{nxt})" if committed.get(e) else ""
+        print(f"{nm(e)[:23]:24}{row[e]['total']:>6}{subs[e]:>+6d}{' '.join(left[e]) or '-':>13}{bank[e]:6.1f}  {source[e]}{now}")
 
     cands = {"your squad": squads[me]}
     for f in a.candidate:
@@ -114,10 +130,27 @@ def main():
             cache[key] = solve_squad(proj, bank[e] + sum(sp.values()), base=sq, transfers=k, sell=sp)
         return cache[key]
 
+    def chip_now(e, s):
+        """Points a chip committed for the next gameweek adds that week, given the manager's plan."""
+        if g0 not in proj.gws:
+            return 0.0
+        R, v = proj.rows, 0.0
+        for c in committed.get(e, ()):
+            if c == "BB":
+                v += sum(R[i]["gw"][g0] for i in s["squad"] if i not in s["lineups"][g0])
+            elif c == "TC":
+                v += R[s["caps"][g0]]["gw"][g0]
+            elif c == "FH":
+                one = copy.copy(proj); one.gws = [g0]
+                fh = solve_squad(one, budget[e])
+                v += fh["total"] - sum(R[i]["gw"][g0] * w for i, w in s["weights"][g0].items())
+        return v
+
     def run(kmap, sq, mk):
         sols = {e: sol(e, squads[e], kmap[e]) for e in order if e != me}
         sols[me] = sol(me, sq, mk)
-        return simulate(order, proj, squads, budget, start, chips, kmap, me, vb, cc, sigma,
+        ch = {e: chips[e] + chip_now(e, sols[e]) for e in order}
+        return simulate(order, proj, squads, budget, start, ch, kmap, me, vb, cc, sigma,
                         prizes=prizes, nsim=a.sims, seed=a.seed, sols=sols)
 
     head = f"{'':24}{'window':>7}{'P(1st)':>8}{'P(2nd)':>8}{'P(3rd)':>8}{'P(4th)':>8}{'top 3':>8}{'money':>8}{'EV':>8}"
