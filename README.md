@@ -46,9 +46,16 @@ python tools/run_simulation.py --me <alias> --my-squad my_squad.local.txt --my-b
 - **optimize.py** maximises projected points over the projection window: a legal XI and captain per
   gameweek, under budget and the 3-per-club cap. `--transfers N` limits changes and shows the gain
   over holding; `--horizon N` looks only N gameweeks ahead. The evidence gate stops a player
-  *starting* (not being owned) when his season contradicts the projection; `--no-gate` turns it off.
+  *starting* (not being owned): for the whole window when both his points and his underlying
+  numbers (xG, xA, xGC, defensive contributions) fall well short of the projection, and for the
+  next gameweek only when FPL flags him injured, suspended or 0% to play; `--no-gate` turns it
+  off. `--max-reserves N` caps non-playing bench fodder, since the optimiser does not value bench
+  cover. Double and blank gameweeks are read from the fixtures. Players the projection source
+  gives under a 50% chance to appear are weighted by that chance.
 - **run_simulation.py** plays the season out 100,000 times with correlated scores (shared players,
   and teammates' clean sheets) calibrated to how spread out this league's weekly scores really are.
+  A double gameweek widens that week's spread and a blank narrows it. A chip committed with
+  `--committed` is scored in the week it is played.
   It reports the chance of each prize place and the money it is worth, in two separate blocks:
   a **forecast** (you and the rivals all keep transferring) and a **candidate comparison**
   (each squad scored as it stands). Rival skill is shown both ignored and tiered.
@@ -59,7 +66,29 @@ Players are keyed on FPL element ids (`web_name` alone is not unique) and manage
 `--me` takes your alias, or your real entry id when `FPL_ID_SALT` is set in the environment.
 
 Projections are not collected — fplform's data is copyrighted, so it is read live in a browser
-using `tools/fplform_snippets.md`.
+using `tools/fplform_snippets.md`. When no browser is available, blend three models that need none:
+
+```bash
+python tools/fetch_open_projections.py      # an open-source model's published projections (GitHub)
+python tools/house_projections.py           # this repo's own model, from the collected FPL data
+python tools/fetch_hgb_projections.py       # a second open-source model, gradient boosting (GitHub)
+python tools/combine_projections.py proj_open.txt proj_house.txt proj_hgb.txt --weights 2,1,1
+python tools/build_dataset.py --proj proj_blend.txt
+```
+
+The house and gradient-boosting models are both built from FPL's own data and agree closely, so
+together they get the same weight as the open model. Averaged over GW4-5 of 2026/27 this blend
+ranked players better than any single model, and ahead of FPL's own ep_next in both weeks. If a fetch fails, blend
+the files you have. Nothing from either open model is stored in this repo; each is read at run
+time, only as numbers, and a file that is stale, malformed, out of range or out of line with FPL's
+ep_next is refused.
+
+```bash
+python tools/price_watch.py --squad my_squad.local.txt --watch "Name (TEAM);Name (TEAM)"
+```
+
+reads FPL's own price-change predictor (new in 2026/27, saved in `latest/bootstrap.json` by the
+hourly pull) and says which players are expected to rise or fall at each of the next three updates.
 
 ## Keeping it unattributable
 
