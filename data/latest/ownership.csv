@@ -1,0 +1,76 @@
+id,web_name,team,pos,owners,managers
+411,Haaland,MCI,FWD,9,m7aa0f2c4; md5c7b575; m70cc7b6a; m8ecfbe9b; m443e673f; mf01a73a8; m6b5b9e77; m5cc3fdda; m05e097b2
+154,Palmer,CHE,MID,8,m7aa0f2c4; m70cc7b6a; m443e673f; mac751a52; mf01a73a8; m6b5b9e77; m05e097b2; mb3da25ed
+8,Calafiori,ARS,DEF,7,m7aa0f2c4; m70cc7b6a; m443e673f; mf01a73a8; m6b5b9e77; m5cc3fdda; m05e097b2
+229,Tarkowski,EVE,DEF,6,m7aa0f2c4; md5c7b575; m70cc7b6a; m443e673f; mf01a73a8; mb3da25ed
+115,De Cuyper,BHA,DEF,6,m7aa0f2c4; md5c7b575; m70cc7b6a; m8ecfbe9b; m6b5b9e77; m05e097b2
+368,Szoboszlai,LIV,MID,6,m7aa0f2c4; m8ecfbe9b; m443e673f; m6b5b9e77; m05e097b2; mb3da25ed
+165,João Pedro,CHE,FWD,6,md5c7b575; m8ecfbe9b; mac751a52; mf01a73a8; m6b5b9e77; m05e097b2
+1,Raya,ARS,GK,5,m7aa0f2c4; m8ecfbe9b; m443e673f; mac751a52; m6b5b9e77
+15,Ødegaard,ARS,MID,5,md5c7b575; m70cc7b6a; mf01a73a8; m6b5b9e77; m5cc3fdda
+109,Verbruggen,BHA,GK,5,md5c7b575; m70cc7b6a; mf01a73a8; m6b5b9e77; m5cc3fdda
+388,Guéhi,MCI,DEF,4,m7aa0f2c4; m8ecfbe9b; mac751a52; mb3da25ed
+40,Rogers,CHE,MID,4,m7aa0f2c4; m443e673f; mac751a52; mf01a73a8
+399,Cherki,MCI,MID,4,m7aa0f2c4; m8ecfbe9b; m6b5b9e77; mb3da25ed
+346,Calvert-Lewin,LEE,FWD,4,m7aa0f2c4; md5c7b575; m443e673f; m6b5b9e77
+57,Petrović,BOU,GK,4,m8ecfbe9b; mac751a52; m05e097b2; mb3da25ed
+572,Tzolakis,HUL,GK,3,m70cc7b6a; m443e673f; mf01a73a8
+277,Egan,HUL,DEF,3,m70cc7b6a; m443e673f; mf01a73a8
+4,Gabriel,ARS,DEF,3,m8ecfbe9b; mac751a52; mb3da25ed
+557,Tzolis,ARS,MID,3,m8ecfbe9b; m443e673f; mb3da25ed
+356,Virgil,LIV,DEF,3,mac751a52; m05e097b2; mb3da25ed
+259,Diop,IPS,DEF,2,m7aa0f2c4; m6b5b9e77
+212,Hughes,CRY,MID,2,m7aa0f2c4; m8ecfbe9b
+173,Thomas,COV,DEF,2,md5c7b575; mf01a73a8
+427,Mbeumo,MUN,MID,2,md5c7b575; mac751a52
+426,B.Fernandes,MUN,MID,2,md5c7b575; m5cc3fdda
+175,van Ewijk,COV,DEF,2,md5c7b575; m6b5b9e77
+391,Gvardiol,MCI,DEF,2,m70cc7b6a; m05e097b2
+379,Isak,LIV,FWD,2,m70cc7b6a; mac751a52
+449,Hall,NEW,DEF,2,m8ecfbe9b; m6b5b9e77
+464,Wissa,NEW,FWD,2,mac751a52; m5cc3fdda
+51,George Hemmings,AVL,MID,2,mf01a73a8; m5cc3fdda
+367,Gakpo,LIV,MID,2,m5cc3fdda; m05e097b2
+58,Forster,BOU,GK,1,m7aa0f2c4
+272,Kusi-Asare,FUL,FWD,1,m7aa0f2c4
+496,Kinsky,TOT,GK,1,md5c7b575
+330,Bogle,LEE,DEF,1,md5c7b575
+68,Tavernier,BOU,MID,1,md5c7b575
+575,Yirenkyi,COV,MID,1,md5c7b575
+124,Groß,BHA,MID,1,m70cc7b6a
+480,Gibbs-White,NFO,MID,1,m70cc7b6a
+286,Belloumi,HUL,MID,1,m70cc7b6a
+169,Mheuka,CHE,FWD,1,m70cc7b6a
+455,Tonali,TOT,MID,1,m8ecfbe9b
+552,Brobbey,SUN,FWD,1,m8ecfbe9b
+556,Targett,HUL,DEF,1,m8ecfbe9b
+362,Jacquet,LIV,DEF,1,m443e673f
+94,Schade,BRE,MID,1,m443e673f
+88,Kayode,BRE,DEF,1,m443e673f
+194,Thomas-Asante,COV,FWD,1,m443e673f
+503,Van de Ven,TOT,DEF,1,mac751a52
+268,King,FUL,MID,1,mac751a52
+482,Hudson-Odoi,NFO,MID,1,mac751a52
+32,Cash,AVL,DEF,1,mac751a52
+649,Maitland-Niles,EVE,DEF,1,mf01a73a8
+12,Saka,ARS,MID,1,mf01a73a8
+441,Obi,MUN,FWD,1,mf01a73a8
+454,Elanga,NEW,MID,1,m6b5b9e77
+418,Maguire,MUN,DEF,1,m5cc3fdda
+201,Muñoz,NFO,DEF,1,m5cc3fdda
+397,Semenyo,MCI,MID,1,m5cc3fdda
+167,Delap,NFO,FWD,1,m5cc3fdda
+495,Austin,TOT,GK,1,m5cc3fdda
+586,Mendy,HUL,DEF,1,m5cc3fdda
+112,Van Hecke,TOT,DEF,1,m5cc3fdda
+279,Ajayi,HUL,DEF,1,m05e097b2
+569,Gonzalo,FUL,FWD,1,m05e097b2
+111,Steele,BHA,GK,1,m05e097b2
+210,Wharton,CRY,MID,1,m05e097b2
+646,Fofana,SUN,MID,1,m05e097b2
+28,Martinez,CHE,GK,1,mb3da25ed
+200,Lacroix,CHE,DEF,1,mb3da25ed
+155,Enzo,MCI,MID,1,mb3da25ed
+26,Havertz,ARS,FWD,1,mb3da25ed
+526,Solanke,TOT,FWD,1,mb3da25ed
+223,Mateta,CRY,FWD,1,mb3da25ed
