@@ -53,20 +53,26 @@ def player_cov(ids, proj, var_bands, club_corr, other_club=-0.008):
 
 
 def window_moments(sols, order, proj, var_bands, club_corr):
-    """Mean window points per manager and the (unscaled) covariance of their window totals."""
+    """Mean window points per manager and the (unscaled) covariance of their window totals.
+    Returns (mu, C, C1): C scales each player's weekly spread by the square root of his club's
+    matches that week (0 in a blank, 2 in a double); C1 treats every week as one match, which is
+    what the league's measured spread describes, so calibration uses C1."""
     gws = proj.gws
     ids = sorted({i for e in order for g in gws for i in sols[e]["weights"][g]})
     ix = {p: n for n, p in enumerate(ids)}
     S = player_cov(ids, proj, var_bands, club_corr)
     C = np.zeros((len(order), len(order)))
+    C1 = np.zeros((len(order), len(order)))
     for g in gws:
         W = np.zeros((len(order), len(ids)))
         for m, e in enumerate(order):
             for i, w in sols[e]["weights"][g].items():
                 W[m, ix[i]] = w
-        C += W @ S @ W.T
+        d = np.sqrt(np.array([proj.fixtures(i, g) for i in ids], float))
+        C1 += W @ S @ W.T
+        C += W @ (S * np.outer(d, d)) @ W.T
     mu = np.array([sols[e]["total"] for e in order])
-    return mu, C
+    return mu, C, C1
 
 
 def calibrate(C, mu, n_weeks, target_sd, rng, draws=20000):
@@ -97,17 +103,22 @@ def simulate(order, proj, squads, budgets, start, chips, k, me, var_bands, club_
     for e in order:
         if e not in sols:
             sols[e] = solve_squad(proj, budgets[e], base=squads[e], transfers=k.get(e, 0))
-    mu, C = window_moments(sols, order, proj, var_bands, club_corr)
+    mu, C, C1 = window_moments(sols, order, proj, var_bands, club_corr)
     G = len(gws)
-    scale, model_sd = calibrate(C, mu, G, sigma_week, rng)
-    C = C * scale
+    scale, model_sd = calibrate(C1, mu, G, sigma_week, rng)
+    C, C1 = C * scale, C1 * scale
     after = max(0, last_gw - int(gws[-1][2:]))
     field = (mu / G).mean(); edge = mu / G - field
     tail = sum(decay ** t for t in range(after))
     base = (np.array([start[e] for e in order], float) + mu + field * after + edge * tail
             + np.array([chips[e] for e in order], float))
     L = np.linalg.cholesky(C + 1e-9 * np.eye(len(C)))
-    noise = rng.standard_normal((nsim, len(order))) @ L.T * np.sqrt(1 + after / G)
+    if np.allclose(C, C1):                     # no blanks or doubles in the window
+        noise = rng.standard_normal((nsim, len(order))) @ L.T * np.sqrt(1 + after / G)
+    else:                                      # window as scheduled; the tail as ordinary weeks
+        L1 = np.linalg.cholesky(C1 + 1e-9 * np.eye(len(C1)))
+        noise = (rng.standard_normal((nsim, len(order))) @ L.T
+                 + rng.standard_normal((nsim, len(order))) @ L1.T * np.sqrt(after / G))
     tot = base + noise
     rank = (-tot).argsort(1).argsort(1) + 1                    # 1 = top
     n = len(order)
