@@ -108,8 +108,9 @@ def main():
     ap.add_argument("--horizon", type=int, help="use only the first N gameweeks of the window")
     ap.add_argument("--ros-weight", type=float, default=0.0, help="weight on rest-of-season points")
     ap.add_argument("--no-gate", action="store_true")
-    ap.add_argument("--max-reserves", type=int, help="at most N squad players under a 50%% chance to appear "
-                    "(non-playing bench fodder); the optimiser does not value bench cover, so this keeps it")
+    ap.add_argument("--max-reserves", type=int, help="at most N squad players who will not play: under a 50%% "
+                    "chance to appear, or projected under 1 point a match (non-playing bench fodder); the optimiser "
+                    "does not value bench cover, so this keeps it")
     a = ap.parse_args()
 
     data = Data(a.data)
@@ -147,8 +148,15 @@ def main():
         budget = a.budget if a.budget is not None else 100.0
     limits = []
     if a.max_reserves is not None:
-        reserves = {el for el, _, _ in proj.scaled} | {i for i, r in proj.rows.items() if not r["projected"]}
-        limits.append((reserves, a.max_reserves))
+        # a reserve will not play: the source gives him under a 50% chance, or has no projection for him,
+        # or projects him under 1 point a match (sources without a chance column, such as the blend)
+        matches = lambda i: max(1, sum(proj.fixtures(i, g) for g in proj.gws))
+        reserves = ({el for el, _, _ in proj.scaled}
+                    | {i for i, r in proj.rows.items() if not r["projected"] or r["next"] < matches(i)})
+        cap = a.max_reserves
+        if base and a.transfers is not None:     # reserves already owned can only go one transfer at a time
+            cap = max(cap, len(reserves & set(base)) - a.transfers)
+        limits.append((reserves, cap))
     res = solve_squad(proj, budget, base=base, transfers=a.transfers, must=resolve(a.must, data),
                       ban=resolve(a.ban, data), no_start=nostart, ros_weight=a.ros_weight, sell=sell, limits=limits)
     if base and a.transfers is not None:
