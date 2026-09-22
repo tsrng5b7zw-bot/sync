@@ -1,0 +1,56 @@
+name: Pull data
+
+on:
+  schedule:
+    # hourly at :17 past
+    - cron: "17 * * * *"
+    # daily per-player histories at 06:40 UTC
+    - cron: "40 6 * * *"
+  workflow_dispatch:
+    inputs:
+      elements:
+        description: "Also pull per-player element summaries"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pull
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet requests
+      - name: Hourly pull
+        env:
+          FPL_LEAGUE_ID: ${{ secrets.FPL_LEAGUE_ID }}
+          FPL_ID_SALT: ${{ secrets.FPL_ID_SALT }}
+        run: python collector/pull.py
+      - name: Daily element summaries
+        if: github.event.schedule == '40 6 * * *' || github.event.inputs.elements == 'true'
+        run: python collector/pull.py --elements
+      - name: Commit
+        run: |
+          git config user.name "fpl-bot"
+          git config user.email "fpl-bot@users.noreply.github.com"
+          git add -A data
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: $(date -u +'%Y-%m-%d %H:%M UTC')"
+            # a commit made on the web while this job ran would reject a plain push
+            ok=0
+            for i in 1 2 3; do
+              if git pull --rebase --quiet origin main && git push; then ok=1; break; fi
+              sleep 10
+            done
+            [ "$ok" = 1 ]
+          fi
