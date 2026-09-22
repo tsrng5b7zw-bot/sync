@@ -59,6 +59,10 @@ def main():
             print(f"  ! the projections skip GW{data.nxt_gw}: fetch fresh ones before deciding anything")
         if proj.unmatched:
             print(f"  ! {len(proj.unmatched)} rows match no FPL player (renamed or transferred?): {', '.join(proj.unmatched[:15])}")
+        if proj.scaled:
+            big = sorted(proj.scaled, key=lambda t: -t[2] * (1 - t[1]))[:6]
+            print(f"  {len(proj.scaled)} players under a 50% chance to appear are weighted by that chance, e.g. "
+                  + ", ".join(f"{data.label(el)} {tot:.1f}->{tot * pr:.1f}" for el, pr, tot in big))
     else:
         print(f"no {pr} — read the projections first (tools/fplform_snippets.md)")
 
