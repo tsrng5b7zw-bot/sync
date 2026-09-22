@@ -137,6 +137,32 @@ def effective_squad(picks_by_gw, cur_gw):
     return [p["element"] for p in cur.get("picks", [])], False
 
 
+def season_of(boot):
+    """'2026' for 2026/27: the year of the first gameweek's deadline. Player ids and gameweek
+    numbers restart every season, so anything cached from last season must go."""
+    ev = (boot or {}).get("events") or [{}]
+    return str(ev[0].get("deadline_time") or "")[:4]
+
+
+def new_season_cleanup(season):
+    """Remove last season's cached picks, live files and per-player histories when the season
+    changes. Returns True if it cleaned anything."""
+    mp = OUT / "meta.json"
+    old = json.loads(mp.read_text(encoding="utf-8")).get("season") if mp.exists() else None
+    if not season or old == season or not mp.exists():
+        return False
+    if old is None:                         # meta written before seasons were recorded: same season
+        return False
+    for d in ("entries", "elements"):
+        if (OUT / d).exists():
+            shutil.rmtree(OUT / d)
+    for f in list(OUT.glob("live_gw*")) + [OUT / "player_gw_history.csv"]:
+        if f.exists():
+            f.unlink()
+    print(f"new season {season} (was {old}): cleared last season's cached files")
+    return True
+
+
 def current_and_next(events):
     cur = next((e for e in events if e.get("is_current")), None)
     nxt = next((e for e in events if e.get("is_next")), None)
@@ -151,6 +177,8 @@ def main_hourly():
     boot = get("bootstrap-static/")
     if not boot:
         sys.exit("bootstrap failed")
+    season = season_of(boot)
+    new_season_cleanup(season)
     dump(boot, "bootstrap.json")
     teams = {t["id"]: t["short_name"] for t in boot["teams"]}
     team_names = {t["id"]: t["name"] for t in boot["teams"]}
@@ -172,7 +200,9 @@ def main_hourly():
     id2pos = {e["id"]: POS.get(e["element_type"]) for e in boot["elements"]}
 
     print("fixtures ...")
-    fx = get("fixtures/") or []
+    fx = get("fixtures/")
+    if fx is None:
+        sys.exit("fixtures unavailable; keeping the previous data")
     dump(fx, "fixtures.json")
     fxrows = []
     for f in fx:
@@ -200,6 +230,10 @@ def main_hourly():
     print("league standings ...")
     league = get(f"leagues-classic/{LEAGUE_ID}/standings/")
     standings = (league or {}).get("standings", {}).get("results", [])
+    if not standings and league:
+        # before FPL first calculates a new season's standings, members sit under new_entries
+        standings = [{"entry": r["entry"], "rank": None, "last_rank": None, "total": 0, "event_total": 0}
+                     for r in (league.get("new_entries") or {}).get("results", [])]
     if not standings:
         sys.exit("league standings unavailable; keeping the previous data rather than writing an empty league")
 
@@ -234,6 +268,11 @@ def main_hourly():
                 pk = scrub_picks(pk, a)
                 dump(pk, f"entries/{a}/picks_gw{g}.json")
                 picks_by_gw[g] = pk
+            elif f.exists():                              # refresh failed: keep the last good copy
+                picks_by_gw[g] = json.loads(f.read_text(encoding="utf-8"))
+        cur_pk = picks_by_gw.get(cur_gw) or {}
+        if cur_pk.get("active_chip") == "freehit" and not picks_by_gw.get((cur_gw or 0) - 1):
+            sys.exit("a Free Hit squad cannot be reverted without the previous week's picks; keeping the previous data")
         chips = [f"{CHIP_NAMES.get(c['name'], c['name'])}@GW{c['event']}" for c in (hist or {}).get("chips", [])]
         curr = (hist or {}).get("current", [])
         last = curr[-1] if curr else {}
@@ -300,7 +339,9 @@ def main_hourly():
         "next_deadline_utc": (nxt or {}).get("deadline_time"),
         "current_deadline_utc": (cur or {}).get("deadline_time"),
         "current_finished": (cur or {}).get("finished"),
-        "current_fixtures_finished": bool(cur_gw) and all(f.get("finished") for f in fx if f.get("event") == cur_gw),
+        "current_fixtures_finished": bool(cur_gw) and bool([f for f in fx if f.get("event") == cur_gw])
+                                     and all(f.get("finished") for f in fx if f.get("event") == cur_gw),
+        "season": season,
         "entries": [alias(e) for e in entry_ids],
     }
     dump(meta, "meta.json")
@@ -312,23 +353,38 @@ def main_hourly():
 def main_elements():
     boot_p = OUT / "bootstrap.json"
     boot = json.loads(boot_p.read_text(encoding="utf-8")) if boot_p.exists() else get("bootstrap-static/")
+    if not boot:
+        sys.exit("bootstrap unavailable")
+    new_season_cleanup(season_of(boot))
     min_min = int(CFG.get("element_summary_min_minutes", 1))
     ids = [e["id"] for e in boot["elements"] if (e.get("minutes") or 0) >= min_min]
     print(f"element summaries for {len(ids)} players ...")
-    rows = []
+    rows, missing = [], 0
     for i, pid in enumerate(ids, 1):
         js = get(f"element-summary/{pid}/")
-        if not js:
+        cached = OUT / f"elements/{pid}.json"
+        if js:
+            dump(js, f"elements/{pid}.json")
+        elif cached.exists():                             # fetch failed: last good copy
+            js = json.loads(cached.read_text(encoding="utf-8"))
+        else:
+            missing += 1
             continue
-        dump(js, f"elements/{pid}.json")
         for h in js.get("history", []):
             rows.append({"id": pid, **{k: h.get(k) for k in ("round", "opponent_team", "was_home", "minutes", "total_points", "goals_scored", "assists",
                                                              "clean_sheets", "goals_conceded", "bonus", "bps", "yellow_cards", "expected_goals", "expected_assists",
                                                              "expected_goal_involvements", "expected_goals_conceded", "defensive_contribution", "value", "selected", "transfers_in", "transfers_out")}})
         if i % 50 == 0:
             print(f"  {i}/{len(ids)}")
-    if rows:
+    hist_p = OUT / "player_gw_history.csv"
+    if missing > max(3, 0.02 * len(ids)) and hist_p.exists():
+        print(f"  ! {missing} players unavailable; keeping the previous player_gw_history.csv", file=sys.stderr)
+    elif rows:
+        if missing:
+            print(f"  ! {missing} players unavailable and left out", file=sys.stderr)
         write_csv(rows, "player_gw_history.csv", list(rows[0].keys()))
+    elif not ids and hist_p.exists():
+        hist_p.unlink()                                   # new season, nobody has played yet
     manifest = sorted(str(p.relative_to(OUT)) for p in OUT.rglob("*") if p.is_file() and p.name != "manifest.txt")
     (OUT / "manifest.txt").write_text("\n".join(manifest) + "\n", encoding="utf-8")
     print("done")
