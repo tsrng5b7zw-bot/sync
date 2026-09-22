@@ -1,0 +1,5 @@
+{
+  "_comment": "The league id and the alias key come from repository secrets FPL_LEAGUE_ID and FPL_ID_SALT; nothing identifying belongs in this file.",
+  "element_summary_min_minutes": 1,
+  "request_pause_seconds": 0.25
+}
