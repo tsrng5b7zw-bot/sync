@@ -9,3 +9,7 @@ squad_next.txt
 *.local.json
 *.local.txt
 .DS_Store
+proj_house.txt
+proj_open.txt
+proj_blend.txt
+proj_hgb.txt
