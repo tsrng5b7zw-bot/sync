@@ -9,8 +9,8 @@ These functions encode rules that were each got wrong at least once:
     missing them — for every manager, not just you.
   * Week-to-week noise must be measured over several gameweeks, not the latest one.
 """
-import csv, hashlib, hmac, json, os, statistics as st
-from collections import defaultdict
+import csv, hashlib, hmac, json, math, os, statistics as st
+from collections import Counter, defaultdict
 from pathlib import Path
 
 CHIP_NAMES = {"wildcard": "WC", "freehit": "FH", "bboost": "BB", "3xc": "TC"}
@@ -46,6 +46,9 @@ class Data:
         self.players = {int(r["id"]): r for r in read_csv(self.D / "players.csv")}
         self.league = read_csv(self.D / "league.csv") if (self.D / "league.csv").exists() else []
         self._round_pts = None
+        self._gw_value = None
+        self._nfix = None
+        self._xcal = None
 
     def resolve_entry(self, value):
         """Accept an alias as it appears in the data, or a real entry id when FPL_ID_SALT is set."""
@@ -105,25 +108,77 @@ class Data:
     def selling_prices(self, eid, ids):
         """What each player would sell for today: purchase price plus half of any rise, rounded
         down to 0.1m; the current price if he has fallen. Purchase prices come from the public
-        transfer history (latest purchase wins); players held since the start were bought at their
-        opening price. Anyone not in that history - a move made for a deadline that has not passed
-        yet - is taken at today's price."""
+        transfer history (latest purchase wins) and apply only to players still in the public squad;
+        players held since the team was created were bought at that gameweek's price (the season's
+        opening price for a GW1 team). Anyone not in the public squad - a move made for a deadline
+        that has not passed yet, including buying back someone sold earlier - is taken at today's
+        price."""
         bought = {}
         for t in sorted(self.transfers(eid), key=lambda t: (t["event"], t.get("time") or "")):
             bought[t["element_in"]] = t["element_in_cost"]
         public = set(self.squad(eid))
+        cur = self.history(eid).get("current", [])
+        first_gw = cur[0]["event"] if cur else 1
         out = {}
         for el in ids:
             p = self.players[el]
             now = int(p["now_cost"])
-            if el in bought:
+            if el in public and el in bought:
                 buy = bought[el]
             elif el in public:
-                buy = now - int(p["cost_change_start"] or 0)
+                buy = self.price_at(el, first_gw) if first_gw > 1 else None
+                if buy is None:
+                    buy = now - int(p["cost_change_start"] or 0)
             else:
                 buy = now
             out[el] = (buy + (now - buy) // 2 if now > buy else now) / 10
         return out
+
+    def price_at(self, el, gw):
+        """The player's price (tenths of a million) during gameweek `gw`, from the per-player
+        history, or None if the history does not cover it."""
+        if self._gw_value is None:
+            self._gw_value = {}
+            path = self.D / "player_gw_history.csv"
+            if path.exists():
+                for r in read_csv(path):
+                    try:
+                        self._gw_value.setdefault((int(r["id"]), int(r["round"])), int(float(r["value"])))
+                    except (KeyError, TypeError, ValueError):
+                        continue
+        return self._gw_value.get((el, gw))
+
+    def fixture_counts(self):
+        """{(team short name, gameweek): number of fixtures} from fixtures.csv. A team missing
+        from a gameweek has a blank (0); two fixtures is a double."""
+        if self._nfix is None:
+            self._nfix = defaultdict(int)
+            path = self.D / "fixtures.csv"
+            if path.exists():
+                for r in read_csv(path):
+                    ev = r.get("event")
+                    if ev in (None, "", "None"):
+                        continue                    # postponed and not yet rescheduled
+                    for side in ("team_h", "team_a"):
+                        self._nfix[(r[side], int(ev))] += 1
+        return self._nfix
+
+    def underlying_per90(self, el):
+        """Points per 90 that the underlying numbers imply: appearance, xG and xA, clean-sheet odds
+        from xGC, goals-conceded deductions, the defensive-contribution bonus, saves, bonus and
+        cards. Scaled per position so the season's regulars average out at their actual points.
+        None under 90 minutes."""
+        if self._xcal is None:
+            acc = defaultdict(lambda: [0.0, 0.0])
+            for p in self.players.values():
+                m = float(p["minutes"] or 0)
+                if m >= 270:
+                    x = _xpts90(p)
+                    acc[p["pos"]][0] += float(p["total_points"] or 0) / (m / 90); acc[p["pos"]][1] += x
+            self._xcal = {k: (a / b if b > 0 else 1.0) for k, (a, b) in acc.items()}
+        p = self.players[el]
+        x = _xpts90(p)
+        return None if x is None else x * self._xcal.get(p["pos"], 1.0)
 
     def chips_left(self, eid, committed=()):
         """Chips still available for the next gameweek, both sets handled. `committed` lists
@@ -208,6 +263,25 @@ class Data:
             if len(v) >= 4:
                 sds.append(st.stdev(v))
         return (st.mean(sds), len(sds)) if sds else (11.7, 0)
+
+
+def _xpts90(p):
+    m = float(p["minutes"] or 0)
+    if m < 90:
+        return None
+    f, pos = 90 / m, p["pos"]
+    app = 2.0 if m / max(1, int(p["starts"] or 0)) >= 60 else 1.5
+    xgc = float(p["expected_goals_conceded"] or 0) * f
+    v = (app + float(p["expected_goals"] or 0) * f * {"GK": 10, "DEF": 6, "MID": 5, "FWD": 4}[pos]
+         + float(p["expected_assists"] or 0) * f * 3 + math.exp(-xgc) * {"GK": 4, "DEF": 4, "MID": 1, "FWD": 0}[pos])
+    if pos in ("GK", "DEF"):
+        v -= xgc / 2
+    if pos != "GK":                      # defensive-contribution points: 10 CBIT (DEF) or 12 CBIRT (others)
+        lam, k = float(p["defensive_contribution"] or 0) * f, 10 if pos == "DEF" else 12
+        v += 2 * (1 - sum(math.exp(-lam) * lam ** i / math.factorial(i) for i in range(k)))
+    else:
+        v += float(p["saves"] or 0) * f / 3
+    return v + 0.7 * float(p["bonus"] or 0) * f - float(p["yellow_cards"] or 0) * f
 
 
 # ---- player-level variance and club correlation, estimated from the gameweek history ---------
@@ -303,7 +377,7 @@ class Projections:
             raise SystemExit(f"{path}: every projected gameweek is before GW{nxt}; fetch fresh projections")
         self.gap = int(gws[0][2:]) > nxt if nxt else False           # projections skip the next gameweek
         self.gws = gws[:horizon] if horizon else gws
-        self.rows, self.unmatched = {}, []
+        self.rows, self.unmatched, self.scaled = {}, [], []
         by_key = {(p["web_name"], p["team"]): el for el, p in data.players.items()}
         for ln in lines[1:]:
             d = dict(zip(head, ln.split("|")))
@@ -313,9 +387,16 @@ class Projections:
                 continue
             try:
                 gw = {g: float(d.get(g) or 0) for g in self.gws}
+                prob = float(d["prob"]) if d.get("prob") not in (None, "") else None
             except ValueError:
                 self.unmatched.append(f"{d.get('name')} ({d.get('team')}) [bad number]")
                 continue
+            if prob is not None and prob < 0.5:
+                # fplform lists backups and the long-term injured at their points *if they play*
+                # (a reserve keeper with a 0% chance still shows ~3 a week): weight by the odds
+                self.scaled.append((el, prob, sum(gw.values())))
+                gw = {g: v * prob for g, v in gw.items()}
+                d = dict(d, ros=str(float(d.get("ros") or 0) * prob))
             self.rows[el] = self._row(el, gw, d)
 
     def _row(self, el, gw, d=None):
@@ -335,6 +416,15 @@ class Projections:
 
     def label(self, el):
         return self.data.label(el)
+
+    def fixtures(self, el, g):
+        """How many matches the player's club plays in gameweek g ('gw12'): 1 normally, 0 in a
+        blank, 2 in a double. Falls back to 1 when fixtures.csv has nothing for that week."""
+        nf = self.data.fixture_counts()
+        gw = int(g[2:])
+        if not any(k[1] == gw for k in nf):
+            return 1
+        return nf.get((self.rows[el]["team"] if el in self.rows else self.data.players[el]["team"], gw), 0)
 
 
 def read_squad_file(path, data):
@@ -379,13 +469,19 @@ XI_MIN = {"GK": 1, "DEF": 3, "MID": 2, "FWD": 1}
 
 
 def solve_squad(proj, budget, base=None, transfers=None, must=(), ban=(), no_start=(),
-                max_club=3, ros_weight=0.0, timeout=120, sell=None):
+                max_club=3, ros_weight=0.0, timeout=120, sell=None, limits=()):
     """Pick 15 players and a legal XI + captain for each gameweek in proj.gws, maximising
     projected points (captain counted twice). With `base` and `transfers`, at least
     15 - transfers of the base squad are kept. `sell` gives owned players' selling prices, which
     is what keeping them costs; everyone else costs today's price, and `budget` should then be
     bank + selling value. `no_start` players count zero points (they can still fill a slot if
-    nothing else can). Returns dict(status, squad, lineups, caps, total, cost, weights)."""
+    nothing else can): a set of ids zeroes those players in every week, a dict {id: set of gw
+    labels} zeroes them only in those weeks, and {id: None} means every week. A club where the base
+    squad already has more than `max_club` players (a player moved clubs) may stay over the cap,
+    but buying anyone new from it brings it back under, as FPL requires.
+    `limits` is a list of (ids, n): at most n of those ids in the squad (e.g. at most one
+    reserve who will not play, so the bench can cover absences).
+    Returns dict(status, squad, lineups, caps, total, cost, weights)."""
     import pulp
     gws = proj.gws
     base = list(base or [])
@@ -394,7 +490,9 @@ def solve_squad(proj, budget, base=None, transfers=None, must=(), ban=(), no_sta
     R = proj.rows
     sell = sell or {}
     cost = {i: sell.get(i, R[i]["cost"]) if i in base else R[i]["cost"] for i in P}
-    pts = {(i, g): 0.0 if i in no_start else R[i]["gw"][g] for i in P for g in gws}
+    ns = dict(no_start) if isinstance(no_start, dict) else {i: None for i in no_start}
+    off = lambda i, g: i in ns and (ns[i] is None or g in ns[i])
+    pts = {(i, g): 0.0 if off(i, g) else R[i]["gw"][g] for i in P for g in gws}
     m = pulp.LpProblem("squad", pulp.LpMaximize)
     x = {i: pulp.LpVariable(f"x{i}", cat="Binary") for i in P}
     y = {(i, g): pulp.LpVariable(f"y{i}_{g}", cat="Binary") for i in P for g in gws}
@@ -407,8 +505,15 @@ def solve_squad(proj, budget, base=None, transfers=None, must=(), ban=(), no_sta
     for pos, n in SQUAD_SHAPE.items():
         m += pulp.lpSum(x[i] for i in P if R[i]["pos"] == pos) == n
     m += pulp.lpSum(x[i] * cost[i] for i in P) <= budget + 1e-6
-    for t in {R[i]["team"] for i in P}:
-        m += pulp.lpSum(x[i] for i in P if R[i]["team"] == t) <= max_club
+    owned = Counter(R[i]["team"] for i in base)
+    for n, t in enumerate(sorted({R[i]["team"] for i in P})):
+        members = [i for i in P if R[i]["team"] == t]
+        if owned[t] <= max_club:
+            m += pulp.lpSum(x[i] for i in members) <= max_club
+        else:
+            z = pulp.LpVariable(f"newfrom{n}", cat="Binary")          # buys anyone new from this club
+            m += pulp.lpSum(x[i] for i in members if i not in base) <= max_club * z
+            m += pulp.lpSum(x[i] for i in members) <= owned[t] - (owned[t] - max_club) * z
     for g in gws:
         m += pulp.lpSum(y[i, g] for i in P) == 11
         for pos, n in XI_MIN.items():
@@ -418,6 +523,8 @@ def solve_squad(proj, budget, base=None, transfers=None, must=(), ban=(), no_sta
         for i in P:
             m += y[i, g] <= x[i]
             m += c[i, g] <= y[i, g]
+    for ids, n in limits:
+        m += pulp.lpSum(x[i] for i in ids if i in x) <= n
     for i in must:
         m += x[i] == 1
     for i in ban:
