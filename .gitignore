@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+data_pull/
+proj_raw.txt
+proj.txt
+actuals.txt
+league_summary.txt
+squad_next.txt
+*.local.json
+*.local.txt
+.DS_Store
