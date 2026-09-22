@@ -5,7 +5,7 @@ Download the collector's latest data from GitHub into a local folder.
   python tools/fetch_latest.py <owner>/<repo> [--dest DIR] [--elements] [--prices N]
 
 Reads raw.githubusercontent.com only (that host is reachable from the Claude workspace; the FPL site is not).
-Default dest: ./data_pull/latest
+Default dest: ./data_pull (files land in latest/ and prices/), which is where the other tools look by default.
 """
 import argparse, sys, urllib.request, urllib.error
 from pathlib import Path
