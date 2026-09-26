@@ -40,12 +40,54 @@ RECENT = 4               # gameweeks used for the minutes model
 SUB_POINTS = 1.2         # a substitute appearance: the appearance point plus a little
 
 
+HISTORY_FIELDS = ("minutes", "total_points", "goals_scored", "assists", "clean_sheets", "goals_conceded", "bonus",
+                  "bps", "yellow_cards", "expected_goals", "expected_assists", "expected_goal_involvements",
+                  "expected_goals_conceded", "defensive_contribution")
+
+
+def as_of(d, gw):
+    """Rewind the data to the eve of `gw`: season totals summed from the per-gameweek history through
+    gw-1 (starts counted as 60-minute appearances; saves, which the history lacks, pro-rated by
+    minutes), injury and availability flags cleared, the calendar pointed at `gw`. Prices stay as
+    they are today, which only affects the position-and-price norm."""
+    hp = d.D / "player_gw_history.csv"
+    if not hp.exists():
+        raise SystemExit("--as-of needs data_pull/latest/player_gw_history.csv")
+    tot = defaultdict(lambda: defaultdict(float))
+    for r in read_csv(hp):
+        if int(r["round"]) < gw:
+            el = int(r["id"])
+            for f in HISTORY_FIELDS:
+                tot[el][f] += float(r.get(f) or 0)
+            if float(r["minutes"] or 0) >= 60:
+                tot[el]["starts"] += 1
+    for el, p in d.players.items():
+        t = tot.get(el, {})
+        full = float(p["minutes"] or 0)
+        share = (t.get("minutes", 0.0) / full) if full else 0.0
+        for f in HISTORY_FIELDS:
+            p[f] = f"{t.get(f, 0.0):.2f}"
+        p["starts"] = str(int(t.get("starts", 0)))
+        p["saves"] = f"{float(p.get('saves') or 0) * share:.1f}"
+        p["status"] = "a"
+        p["chance_of_playing_next_round"] = ""
+        p["news"] = ""
+    d.cur_gw, d.nxt_gw = gw - 1, gw
+    d.meta = dict(d.meta, current_gw=gw - 1, next_gw=gw, current_fixtures_finished=True,
+                  pulled_at_utc=f"rewound to the eve of GW{gw}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", default="data_pull"); ap.add_argument("--out", default="proj_house.txt")
     ap.add_argument("--weeks", type=int, default=6, help="gameweeks to project from the next one")
+    ap.add_argument("--as-of", type=int, help="backtesting: rebuild the model as it would have stood before this "
+                    "gameweek, from the per-gameweek history only (season totals through the week before; "
+                    "injury flags ignored, since today's flags were unknown then)")
     a = ap.parse_args()
     d = Data(a.data)
+    if a.as_of:
+        as_of(d, a.as_of)
     nxt = d.nxt_gw or ((d.cur_gw or 0) + 1)
     gws = [g for g in range(nxt, nxt + a.weeks) if g <= 38]
 
