@@ -391,10 +391,13 @@ class Projections:
             except ValueError:
                 self.unmatched.append(f"{d.get('name')} ({d.get('team')}) [bad number]")
                 continue
-            if prob is not None and prob < 0.5:
-                # fplform lists backups and the long-term injured at their points *if they play*
-                # (a reserve keeper with a 0% chance still shows ~3 a week): weight by the odds
-                self.scaled.append((el, prob, sum(gw.values())))
+            if prob is not None:
+                # fplform's points are "if he appears" (its help page says they ignore availability),
+                # so every player is weighted by its own odds that he plays: a 75% rotation risk
+                # is worth three-quarters of his figure, a reserve keeper at 0% nothing. Those under
+                # 50% are also listed as reserves for --max-reserves.
+                if prob < 0.5:
+                    self.scaled.append((el, prob, sum(gw.values())))
                 gw = {g: v * prob for g, v in gw.items()}
                 d = dict(d, ros=str(float(d.get("ros") or 0) * prob))
             self.rows[el] = self._row(el, gw, d)
