@@ -153,7 +153,7 @@ def load_txt(path, key, prob_weight=False):
             m = re.fullmatch(r"gw(\d+)", k or "")
             x = num(v)
             if m and x is not None:
-                per_week[int(m.group(1))][el] = x * (p if p is not None and p < 0.5 else 1.0)
+                per_week[int(m.group(1))][el] = x * (p if p is not None else 1.0)
     return per_week
 
 
