@@ -90,6 +90,22 @@ python tools/price_watch.py --squad my_squad.local.txt --watch "Name (TEAM);Name
 reads FPL's own price-change predictor (new in 2026/27, saved in `latest/bootstrap.json` by the
 hourly pull) and says which players are expected to rise or fall at each of the next three updates.
 
+```bash
+python tools/fixture_watch.py --squad my_squad.local.txt        # blank and double gameweeks, postponements
+python tools/starter_risk.py --squad my_squad.local.txt          # will he play: flags, news, recent minutes, market
+python tools/archive_projections.py                              # keep today's projection files for scoring later
+python tools/backtest.py [--gws 2-5] [--ci]                      # score every source against real points
+python tools/combine_projections.py proj.txt proj_blend.txt --common --out proj_cons.txt   # fplform + blend, 50/50
+```
+
+`fixture_watch.py` is the chip-timing check: a Bench Boost or Triple Captain in a double week is
+worth about twice a normal one, and a blank week is what the Free Hit is for. `backtest.py`
+re-fetches each open model's published history (never stored here), rebuilds the house model as it
+stood before each week (`house_projections.py --as-of`), and scores them all on the same players
+and the same test, week by week and over the multi-week windows the optimiser uses. fplform can
+only be scored from copies saved on the day by `archive_projections.py`; `archive/` is ignored by
+git so that data stays on your machine.
+
 ## Keeping it unattributable
 
 The committed data contains **no league name, no team names, no manager names and no FPL entry
