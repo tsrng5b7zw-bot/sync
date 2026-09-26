@@ -9,8 +9,8 @@ fetch_open_projections.py, tools/fetch_hgb_projections.py) player by player and 
 Players are matched on (web_name, team). Only gameweeks every file covers are kept. A player missing
 from one file takes the others' average, unless --common drops him (use it when one file is fplform,
 which lists only players it rates, so a player found only in the other file has not been vetted).
-A file with fplform's prob column has its reserves weighted by their chance of playing, as the
-tools do, so a backup listed at full points if he plays does not inflate the average. Independent models make different mistakes, so their average
+A file with fplform's prob column is weighted by each player's chance of appearing, as the tools
+do, because fplform's points are "if he appears"; the other models already price availability in. Independent models make different mistakes, so their average
 is usually closer to the truth than either; averaged over GW4-5 of 2026/27 the open + house blend
 ranked players better than either model alone, and ahead of FPL's own ep_next in both weeks. The house and
 gradient-boosting models share their inputs, so weight the three files 2,1,1.
@@ -53,10 +53,8 @@ def main():
         def val(r, g):
             x = float(r.get(g) or 0)
             p = r.get("prob")
-            if p not in (None, ""):                      # fplform: a reserve at his chance of playing
-                p = float(p)
-                if p < 0.5:
-                    x *= p
+            if p not in (None, ""):                      # fplform: points if he appears, times the odds he does
+                x *= float(p)
             return x
         vals = [sum(wi * val(r, g) for wi, r in have) / tw for g in common]
         base = have[0][1]
