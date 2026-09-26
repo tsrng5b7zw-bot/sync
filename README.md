@@ -50,8 +50,8 @@ python tools/run_simulation.py --me <alias> --my-squad my_squad.local.txt --my-b
   numbers (xG, xA, xGC, defensive contributions) fall well short of the projection, and for the
   next gameweek only when FPL flags him injured, suspended or 0% to play; `--no-gate` turns it
   off. `--max-reserves N` caps non-playing bench fodder, since the optimiser does not value bench
-  cover. Double and blank gameweeks are read from the fixtures. Players the projection source
-  gives under a 50% chance to appear are weighted by that chance.
+  cover. Double and blank gameweeks are read from the fixtures. fplform's points are "if he
+  appears", so every player is weighted by the chance fplform gives him of appearing.
 - **run_simulation.py** plays the season out 100,000 times with correlated scores (shared players,
   and teammates' clean sheets) calibrated to how spread out this league's weekly scores really are.
   A double gameweek widens that week's spread and a blank narrows it. A chip committed with
