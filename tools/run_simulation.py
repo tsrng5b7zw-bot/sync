@@ -47,6 +47,8 @@ def main():
     ap.add_argument("--k-by", default="", help="'auto' or 'entry:k,entry:k' for the tiered case")
     ap.add_argument("--my-k", type=int, help="your own future good transfers in the forecast (default: same as --k)")
     ap.add_argument("--prizes", default="275,125,100,50", help="prize for 1st,2nd,... in money")
+    ap.add_argument("--chip-ev", default="", help="points an unused first-half chip is worth, e.g. 'FH=10,BB=14' "
+                    "(defaults WC 12, BB 10, FH 5, TC 7; raise FH when a blank gameweek is scheduled before GW19)")
     ap.add_argument("--sims", type=int, default=100_000); ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--sigma", type=float, help="weekly spread across the league; measured if omitted")
     ap.add_argument("--horizon", type=int, help="use only the first N gameweeks of the projections")
@@ -59,6 +61,11 @@ def main():
     proj = Projections(a.proj, data, a.horizon)
     names = json.loads(Path(a.names).read_text(encoding="utf-8")) if a.names else {}
     nm = lambda e: ("> " if e == me else "  ") + names.get(e, e)
+    for part in filter(None, (x.strip() for x in a.chip_ev.split(","))):
+        chip, _, val = part.partition("=")
+        if chip.strip().upper() not in CHIP_EV or not val.strip():
+            sys.exit(f"--chip-ev: use CHIP=points with chips among {', '.join(CHIP_EV)}")
+        CHIP_EV[chip.strip().upper()] = float(val)
     prizes = [float(x) for x in a.prizes.split(",")]
     committed = {}
     for c in a.committed:
