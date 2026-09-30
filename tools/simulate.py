@@ -21,8 +21,11 @@ model draws every manager's score jointly:
   after the window, to GW38
     Every manager scores the league average plus their window edge, decaying 11% a week
     (half-life about six gameweeks: squads converge as everyone chases the same form).
-    Unused first-half chips are worth WC 12, BB 10, FH 10, TC 7 points each. Second-half chips are
-    the same for everyone and cancel.
+    Unused first-half chips are worth WC 12, BB 10, FH 5, TC 7 points each (run_simulation.py
+    --chip-ev overrides them). The Free Hit figure is for a half-season with no blank or double
+    gameweek: measured top-10k Free Hits outside a blank returned 0 to -4 against non-chip managers
+    (Fantasy Football Scout, 2017/18 and 2025/26), and a fixture-chase model puts it at 5-10; a
+    blank week would make it worth about 25. Second-half chips are the same for everyone and cancel.
 
 Limitations worth remembering when reading the numbers:
   * k is the most sensitive input. Report the uniform-k answer next to any tiered one.
@@ -34,7 +37,7 @@ import numpy as np
 
 from fplcommon import solve_squad, band, DEFAULT_VAR
 
-CHIP_EV = {"WC": 12.0, "BB": 10.0, "FH": 10.0, "TC": 7.0}
+CHIP_EV = {"WC": 12.0, "BB": 10.0, "FH": 5.0, "TC": 7.0}
 
 
 def player_cov(ids, proj, var_bands, club_corr, other_club=-0.008):
