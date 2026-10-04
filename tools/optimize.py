@@ -30,7 +30,7 @@ those flags describe the next round, and the projections already price in when h
 import argparse, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fplcommon import Data, Projections, read_squad_file, solve_squad
+from fplcommon import Data, Projections, read_squad_file, read_purchases, selling_price, solve_squad
 
 ORDER = {"GK": 0, "DEF": 1, "MID": 2, "FWD": 3}
 
@@ -129,11 +129,16 @@ def main():
         added = proj.ensure(base)
         if added:
             print("no projection (scored as 0):", ", ".join(proj.label(i) for i in added))
-        if a.me:
-            sell = data.selling_prices(data.resolve_entry(a.me), base)
+        purchases = read_purchases(a.squad, data)
+        if a.me or purchases:
+            eid = data.resolve_entry(a.me) if a.me else None
+            sell = (data.selling_prices(eid, base, purchases) if eid is not None
+                    else {i: selling_price(v, int(data.players[i]["now_cost"])) for i, v in purchases.items() if i in base})
             lower = {i: v for i, v in sell.items() if v < proj.rows[i]["cost"] - 1e-9}
             if lower:
                 print("selling below today's price:", ", ".join(f"{proj.label(i)} {v:.1f}" for i, v in lower.items()))
+            if purchases:
+                print(f"purchase prices from the squad file for {len(purchases)} player(s); pass the app's real bank")
         else:
             print("no --me: owned players valued at today's price (selling prices can be lower)")
     gated = {} if a.no_gate else gate(proj, data)
@@ -143,7 +148,13 @@ def main():
         for i in sorted(gated, key=lambda i: -proj.rows[i]["next"])[:10]:
             print(f"   {proj.label(i):28} proj {proj.rows[i]['next']:5.1f}  {gated[i][0]}")
     if base:
-        budget = a.bank + sum(sell.get(i, proj.rows[i]["cost"]) for i in base)
+        held = sum(sell.get(i, proj.rows[i]["cost"]) for i in base)
+        budget = a.bank + held
+        if a.bank < -1e-9:
+            # a negative bank only ever means the tools are valuing a player above his real selling
+            # price; keeping the squad as it is must stay feasible, so transfers have to fund themselves
+            print(f"! --bank {a.bank:.1f}: holding the squad is priced at £{held:.1f}m; any move must pay for itself")
+            budget = held
     else:
         budget = a.budget if a.budget is not None else 100.0
     limits = []
