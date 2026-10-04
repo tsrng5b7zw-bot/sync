@@ -37,8 +37,9 @@ def main():
     squad_teams = defaultdict(int)
     if a.squad:
         for ln in Path(a.squad).read_text(encoding="utf-8").splitlines():
-            if ln.strip() and not ln.startswith("#"):
-                squad_teams[ln.strip().rsplit("(", 1)[1].rstrip(")")] += 1
+            name = ln.split("#", 1)[0].split("@", 1)[0].strip()   # drop a comment or a ' @6.0' price note
+            if name and "(" in name:
+                squad_teams[name.rsplit("(", 1)[1].rstrip(")")] += 1
 
     flagged = False
     for gw in range(start, 39):
