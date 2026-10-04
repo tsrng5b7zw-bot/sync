@@ -30,7 +30,7 @@ Two different questions, answered separately:
 import argparse, copy, json, os, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fplcommon import Data, Projections, read_squad_file, solve_squad, variance_bands, club_correlation
+from fplcommon import Data, Projections, read_squad_file, read_purchases, solve_squad, variance_bands, club_correlation
 from simulate import simulate, CHIP_EV
 import rate_transfers
 
@@ -84,15 +84,17 @@ def main():
     squads = {e: data.squad(e) for e in order}
     source = {e: ("Free Hit reverted" if row[e].get("free_hit_reverted") == "True" else f"GW{data.cur_gw} picks") for e in order}
     bank = {e: float(row[e]["bank"] or 0) for e in order}
+    purchases = {}
     if a.my_squad:
         squads[me] = read_squad_file(a.my_squad, data); source[me] = f"{Path(a.my_squad).name}"
+        purchases = read_purchases(a.my_squad, data)
         if a.my_bank is None:
             print("! --my-squad without --my-bank: using the bank FPL showed at the last deadline")
         else:
             bank[me] = a.my_bank
     for e in order:
         proj.ensure(squads[e])
-    sell = {e: data.selling_prices(e, squads[e]) for e in order}
+    sell = {e: data.selling_prices(e, squads[e], purchases if e == me else None) for e in order}
     budget = {e: bank[e] + sum(sell[e].values()) for e in order}
     subs = {e: data.pending_autosubs(e) for e in order}
     start = {e: float(row[e]["total"] or 0) + subs[e] for e in order}
@@ -133,7 +135,7 @@ def main():
     def sol(e, sq, k):
         key = (e, tuple(sorted(sq)), k)
         if key not in cache:
-            sp = data.selling_prices(e, sq)
+            sp = data.selling_prices(e, sq, purchases if e == me else None)
             cache[key] = solve_squad(proj, bank[e] + sum(sp.values()), base=sq, transfers=k, sell=sp)
         return cache[key]
 
