@@ -31,6 +31,12 @@ def alias(entry_id, salt):
     return "m" + hmac.new(salt.encode(), str(entry_id).encode(), hashlib.sha256).hexdigest()[:8]
 
 
+def selling_price(buy, now):
+    """FPL's selling price, in millions, for a player bought at `buy` and priced `now` (both in
+    tenths): purchase plus half of any rise, rounded down to 0.1m; the current price if he has fallen."""
+    return (buy + (now - buy) // 2 if now > buy else now) / 10
+
+
 class Data:
     """Everything under a fetched data directory (the output of tools/fetch_latest.py).
     Managers appear only as aliases ('m' + 8 hex); see collector/pull.py."""
@@ -105,14 +111,15 @@ class Data:
                 return [p["element"] for p in prev["picks"]]
         return [p["element"] for p in cur.get("picks", [])]
 
-    def selling_prices(self, eid, ids):
+    def selling_prices(self, eid, ids, purchases=None):
         """What each player would sell for today: purchase price plus half of any rise, rounded
         down to 0.1m; the current price if he has fallen. Purchase prices come from the public
         transfer history (latest purchase wins) and apply only to players still in the public squad;
         players held since the team was created were bought at that gameweek's price (the season's
         opening price for a GW1 team). Anyone not in the public squad - a move made for a deadline
         that has not passed yet, including buying back someone sold earlier - is taken at today's
-        price."""
+        price, unless `purchases` (element id -> price paid, in tenths) says what he cost: the squad
+        file carries that as 'web_name (TEAM) @6.0' (see read_purchases)."""
         bought = {}
         for t in sorted(self.transfers(eid), key=lambda t: (t["event"], t.get("time") or "")):
             bought[t["element_in"]] = t["element_in_cost"]
@@ -123,7 +130,9 @@ class Data:
         for el in ids:
             p = self.players[el]
             now = int(p["now_cost"])
-            if el in public and el in bought:
+            if purchases and el in purchases:
+                buy = int(purchases[el])
+            elif el in public and el in bought:
                 buy = bought[el]
             elif el in public:
                 buy = self.price_at(el, first_gw) if first_gw > 1 else None
@@ -131,7 +140,7 @@ class Data:
                     buy = now - int(p["cost_change_start"] or 0)
             else:
                 buy = now
-            out[el] = (buy + (now - buy) // 2 if now > buy else now) / 10
+            out[el] = selling_price(buy, now)
         return out
 
     def price_at(self, el, gw):
@@ -432,12 +441,14 @@ class Projections:
 
 def read_squad_file(path, data):
     """Squad file: one player per line as 'web_name (TEAM)' or a bare element id; '#' starts a
-    comment. Returns element ids and exits on anything it cannot resolve, since a squad that is
-    quietly short of a player produces confident nonsense."""
+    comment; an optional ' @6.0' after the name is the price paid (read_purchases picks it up, so
+    the tools can work out his selling price before the move is public). Returns element ids and
+    exits on anything it cannot resolve, since a squad that is quietly short of a player produces
+    confident nonsense."""
     by_key = {f"{p['web_name']} ({p['team']})": el for el, p in data.players.items()}
     ids, bad = [], []
     for ln in Path(path).read_text(encoding="utf-8").splitlines():
-        s = ln.split("#", 1)[0].strip()
+        s = ln.split("#", 1)[0].split("@", 1)[0].strip()
         if not s:
             continue
         if s.isdigit() and int(s) in data.players:
@@ -456,6 +467,27 @@ def read_squad_file(path, data):
         raise SystemExit(f"{path}: squad must be 2 GK / 5 DEF / 5 MID / 3 FWD, got "
                          + " / ".join(f"{pos.count(k)} {k}" for k in need))
     return ids
+
+
+def read_purchases(path, data):
+    """The '@price' notes in a squad file: element id -> price paid, in tenths of a million.
+    'Raya (ARS) @6.0' means Raya was bought at 6.0. Lines without '@' are not returned."""
+    by_key = {f"{p['web_name']} ({p['team']})": el for el, p in data.players.items()}
+    out = {}
+    for ln in Path(path).read_text(encoding="utf-8").splitlines():
+        s = ln.split("#", 1)[0]
+        if "@" not in s:
+            continue
+        name, price = s.split("@", 1)
+        name, price = name.strip(), price.strip()
+        el = int(name) if name.isdigit() else by_key.get(name)
+        if el is None:
+            raise SystemExit(f"{path}: cannot resolve {name!r} on a line with a purchase price")
+        try:
+            out[el] = int(round(float(price) * 10))
+        except ValueError:
+            raise SystemExit(f"{path}: {name}: purchase price {price!r} is not a number")
+    return out
 
 
 def write_squad_file(path, ids, data, header=""):
