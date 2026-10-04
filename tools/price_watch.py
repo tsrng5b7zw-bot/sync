@@ -20,8 +20,8 @@ CHI = ZoneInfo("America/Chicago")
 def names(spec):
     out = []
     for part in (spec or "").replace("\n", ";").split(";"):
-        part = part.strip()
-        if part and not part.startswith("#") and " (" in part:
+        part = part.split("#", 1)[0].split("@", 1)[0].strip()   # drop a comment or a ' @6.0' price note
+        if part and " (" in part:
             n, t = part.rsplit(" (", 1)
             out.append((n.strip(), t.rstrip(")").strip()))
     return out
