@@ -33,7 +33,8 @@ def main():
     key = {(p["web_name"], p["team"]): el for el, p in d.players.items()}
     names = []
     if a.squad:
-        names += [ln.strip() for ln in Path(a.squad).read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.startswith("#")]
+        # a squad line may end in ' @6.0' (the price paid) or a comment; only the name is wanted
+        names += [n for n in (ln.split("#", 1)[0].split("@", 1)[0].strip() for ln in Path(a.squad).read_text(encoding="utf-8").splitlines()) if n]
     names += [x.strip() for x in a.watch.split(";") if x.strip()]
     els = []
     for n in names:
