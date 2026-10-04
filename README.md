@@ -38,6 +38,8 @@ Runs hourly at :17 past, plus a daily 06:40 UTC job for per-player gameweek hist
 python tools/fetch_latest.py owner/repo                 # download into ./data_pull
 python tools/build_dataset.py --proj proj_raw.txt        # actuals, checked projections, league summary
 python tools/optimize.py --squad my_squad.local.txt --bank 0.6 --me <alias> --transfers 1
+#   a squad line may carry the price paid, 'Raya (ARS) @6.0', for a move FPL has not published yet
+#   (a Wildcard before its deadline): the tools then use his true selling price and the app's real bank
 python tools/rate_transfers.py --names names.local.json  # who transfers well, measured on real lineups
 python tools/run_simulation.py --me <alias> --my-squad my_squad.local.txt --my-bank 0.6 \
        --committed WC --k-by auto --candidate alt.local.txt --names names.local.json
@@ -94,6 +96,7 @@ hourly pull) and says which players are expected to rise or fall at each of the 
 python tools/fixture_watch.py --squad my_squad.local.txt        # blank and double gameweeks, postponements
 python tools/starter_risk.py --squad my_squad.local.txt          # will he play: flags, news, recent minutes, market
 python tools/archive_projections.py                              # keep today's projection files for scoring later
+python tools/ledger.py benchmark --me <alias> --frozen frozen.local.txt --from 6   # your real score vs the same 15 left untouched
 python tools/backtest.py [--gws 2-5] [--ci]                      # score every source against real points
 python tools/combine_projections.py proj.txt proj_blend.txt --common --out proj_cons.txt   # fplform + blend, 50/50
 ```
