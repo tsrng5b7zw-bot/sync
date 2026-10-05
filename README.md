@@ -16,7 +16,8 @@ copyrighted projection source.
 4. **Settings → Actions → General → Workflow permissions → Read and write → Save.**
 5. **Actions → Pull data → Run workflow.** Check `data/latest/` fills within a minute.
 
-Runs hourly at :17 past, plus a daily 06:40 UTC job for per-player gameweek histories.
+Runs at :17 and :47 past each hour (two schedules, because GitHub skips some scheduled runs under
+load), plus a daily 06:40 UTC job for per-player gameweek histories.
 
 ## What lands in `data/`
 
@@ -35,6 +36,9 @@ Runs hourly at :17 past, plus a daily 06:40 UTC job for per-player gameweek hist
 ## Tools
 
 ```bash
+python tools/weekly.py --me <alias> --squad my_squad.local.txt --bank 0.3 --names names.local.json \
+       [--fplform proj_raw.txt] [--committed WC] [--transfers 2] [--candidate alt.local.txt] \
+       [--ledger ledger.local.json --frozen frozen.local.txt]   # the whole weekly run below, one report
 python tools/fetch_latest.py owner/repo                 # download into ./data_pull
 python tools/build_dataset.py --proj proj_raw.txt        # actuals, checked projections, league summary
 python tools/optimize.py --squad my_squad.local.txt --bank 0.6 --me <alias> --transfers 1
@@ -45,6 +49,14 @@ python tools/run_simulation.py --me <alias> --my-squad my_squad.local.txt --my-b
        --committed WC --k-by auto --candidate alt.local.txt --names names.local.json
 ```
 
+- **weekly.py** runs everything below in order — the fetch, the projections (fplform when
+  `proj_raw.txt` is present, always the no-browser blend, and the consensus of the two), the
+  optimiser on every source, every move any source proposed scored on every source with the same
+  test, the league simulation, the three checks and the ledger — and ends with a summary that ranks
+  the decisions by the points at stake and says whether anything clears the bar (with fplform: not
+  losing on either source and more than 2 points on the consensus; without: more than 3 on the
+  blend with every model agreeing). Each step is the tool itself, run unchanged, so any one can be
+  re-run alone; a failed step is reported and the run goes on.
 - **optimize.py** maximises projected points over the projection window: a legal XI and captain per
   gameweek, under budget and the 3-per-club cap. `--transfers N` limits changes and shows the gain
   over holding; `--horizon N` looks only N gameweeks ahead. The evidence gate stops a player
