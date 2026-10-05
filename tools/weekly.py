@@ -5,7 +5,7 @@ The whole weekly run in one command, so an unattended check-in cannot skip a ste
   python tools/weekly.py --me <alias> --squad my_squad.local.txt --bank 0.3 --names names.local.json
          [--fplform proj_raw.txt] [--committed WC] [--transfers 1] [--candidate alt.local.txt ...]
          [--ledger ledger.local.json --frozen frozen.local.txt --from 6] [--watch "Name (TEAM);..."]
-         [--no-fetch] [--no-sim] [--out weekly.local.txt]
+         [--archive /path/that/survives/recloning] [--no-fetch] [--no-sim] [--out weekly.local.txt]
 
 What it does, in order, printing each step's result and a SUMMARY at the end:
   1. fetch the collector's latest data (tools/fetch_latest.py) and say how old it is;
@@ -189,6 +189,7 @@ def main():
     ap.add_argument("--from", dest="start", type=int, default=6, help="first gameweek of the benchmark")
     ap.add_argument("--watch", default="", help="'Name (TEAM);...' extra players for the price and starter checks")
     ap.add_argument("--data", default="data_pull")
+    ap.add_argument("--archive", default="archive", help="where archive_projections.py keeps the dated copies (a path outside the clone survives re-cloning)")
     ap.add_argument("--repo", default="tsrng5b7zw-bot/sync")
     ap.add_argument("--no-fetch", action="store_true", help="use the data already in --data")
     ap.add_argument("--no-sim", action="store_true", help="skip the simulator (slow)")
@@ -296,7 +297,7 @@ def main():
             print("renamed the old proj.txt to proj.stale.local.txt so it is not archived as this week's fplform")
         rc, out, secs = run(["build_dataset.py", "--data", a.data, "--proj", "no-fplform-this-run", "--me", a.me])
         print(tail(out, 2))
-    rc, out, secs = run(["archive_projections.py", "--data", a.data])
+    rc, out, secs = run(["archive_projections.py", "--data", a.data, "--archive", a.archive])
     print(tail(out, 1))
     decider = "consensus" if "consensus" in sources else ("blend" if "blend" in sources else "fplform")
     summary["sources"] = ", ".join(sources); summary["decider"] = decider
