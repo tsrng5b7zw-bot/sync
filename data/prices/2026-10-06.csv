@@ -13,7 +13,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 12,Saka,ARS,MID,96,1,14.1,157652,52930
 13,Rice,ARS,MID,74,0,11.5,7872,95729
 14,Eze,ARS,MID,62,-1,1.0,3098,7369
-15,Ødegaard,ARS,MID,68,0,19.8,92155,99097
+15,Ødegaard,ARS,MID,68,0,19.8,92156,99098
 16,Madueke,ARS,MID,62,0,0.2,814,1667
 17,Merino,ARS,MID,57,-1,0.4,883,3083
 18,Martinelli,ARS,MID,63,0,0.1,0,629
@@ -25,9 +25,9 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 25,Gyökeres,ARS,FWD,71,-1,3.2,20961,18908
 26,Havertz,ARS,FWD,76,0,8.1,51166,79994
 27,G.Jesus,ARS,FWD,59,0,0.1,0,1105
-31,Konsa,ARS,DEF,46,1,19.2,99096,71148
+31,Konsa,ARS,DEF,46,1,19.2,99096,71149
 452,Bruno G.,ARS,MID,67,0,1.8,6764,8394
-557,Tzolis,ARS,MID,63,-1,11.8,12554,169806
+557,Tzolis,ARS,MID,63,-1,11.8,12554,169807
 29,M.Bizot,AVL,GK,45,0,0.1,70,1093
 30,Digne,AVL,DEF,45,0,0.0,0,257
 32,Cash,AVL,DEF,44,0,4.8,3062,27697
@@ -76,7 +76,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 66,Soler,BOU,DEF,40,0,0.3,801,1241
 67,Rayan,BOU,MID,63,-1,1.6,4737,10682
 68,Tavernier,BOU,MID,61,0,6.8,95004,51871
-69,Scott,BOU,MID,61,0,5.6,26346,53058
+69,Scott,BOU,MID,61,0,5.6,26346,53061
 70,Kluivert,BOU,MID,60,0,0.8,2315,20282
 71,Cook,BOU,MID,50,0,0.2,294,1252
 72,Gannon-Doak,BOU,MID,49,0,0.1,159,420
@@ -104,7 +104,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 90,Hickey,BRE,DEF,45,0,0.1,202,280
 92,Ji-soo,BRE,DEF,44,-1,0.0,66,92
 93,Schuster,BRE,DEF,45,0,0.3,17714,2907
-94,Schade,BRE,MID,62,1,12.0,438944,32302
+94,Schade,BRE,MID,62,1,12.0,438945,32302
 95,O.Dango,BRE,MID,63,0,0.5,931,4033
 96,Damsgaard,BRE,MID,54,0,0.4,1812,2595
 97,Jensen,BRE,MID,54,0,0.1,22,713
@@ -117,12 +117,12 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 106,Thiago,BRE,FWD,78,0,9.2,68291,42884
 107,Furo,BRE,FWD,45,0,0.9,977,10306
 108,Wilson,BRE,FWD,54,-1,0.3,1358,2636
-565,M.Sangaré,BRE,MID,56,-1,9.8,9270,149447
+565,M.Sangaré,BRE,MID,56,-1,9.8,9270,149448
 620,Diouf,BRE,DEF,45,0,0.1,544,737
 657,Nunes,BRE,MID,45,0,0.0,377,288
 660,Fredrick,BRE,DEF,40,0,0.0,569,73
 661,Balcombe,BRE,GK,40,0,0.0,3212,633
-109,Verbruggen,BHA,GK,45,0,21.6,82617,82264
+109,Verbruggen,BHA,GK,45,0,21.6,82618,82265
 111,Steele,BHA,GK,40,0,4.1,7971,16501
 113,F.Kadıoğlu,BHA,DEF,44,0,1.6,4611,7871
 114,Boscagli,BHA,DEF,45,0,0.3,2452,921
@@ -135,7 +135,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 121,Mitoma,BHA,MID,59,0,0.0,146,188
 122,Minteh,BHA,MID,58,-1,0.0,48,244
 123,Hinshelwood,BHA,MID,59,0,0.6,318,7357
-124,Groß,BHA,MID,59,2,29.6,859188,15107
+124,Groß,BHA,MID,59,2,29.6,859190,15107
 125,Georginio,BHA,FWD,53,-1,0.5,2987,4242
 126,O'Riley,BHA,MID,54,0,0.1,463,607
 127,Gomez,BHA,MID,50,0,3.9,13535,42499
@@ -160,7 +160,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 652,Azeez,BHA,MID,55,0,0.0,20,47
 658,Ibrahim,BHA,MID,45,0,0.0,324,224
 28,Martinez,CHE,GK,50,0,4.7,8904,23801
-40,Rogers,CHE,MID,77,0,40.7,180863,77457
+40,Rogers,CHE,MID,77,0,40.7,180864,77457
 101,Henderson,CHE,MID,49,0,0.0,558,177
 136,Welbeck,CHE,FWD,59,0,1.0,8939,10196
 140,Sánchez,CHE,GK,49,0,0.7,0,5326
@@ -183,7 +183,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 161,Lavia,CHE,MID,50,0,0.2,508,2631
 163,D.Essugo,CHE,MID,45,0,0.1,0,788
 164,Quenda,CHE,MID,53,0,0.0,79,192
-165,João Pedro,CHE,FWD,77,-1,64.8,74893,429205
+165,João Pedro,CHE,FWD,77,-1,64.8,74893,429206
 168,Marc Guiu,CHE,FWD,50,0,0.2,0,1684
 169,Mheuka,CHE,FWD,45,0,0.5,4900,3804
 170,Emegha,CHE,FWD,49,-1,0.1,99,1170
@@ -268,7 +268,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 647,Osorio,CRY,MID,55,0,0.0,29,82
 21,Nørgaard,EVE,MID,48,-1,0.0,65,364
 209,Johnson,EVE,MID,59,0,0.1,481,794
-226,Pickford,EVE,GK,55,0,9.2,31669,18128
+226,Pickford,EVE,GK,55,0,9.2,31669,18129
 227,Travers,EVE,GK,50,0,0.0,271,288
 228,King,EVE,GK,45,0,0.0,124,187
 229,Tarkowski,EVE,DEF,62,1,16.8,256283,26252
@@ -278,7 +278,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 233,Mykolenko,EVE,DEF,46,1,4.1,41937,30338
 234,Patterson,EVE,DEF,45,0,0.0,0,140
 235,Aznou,EVE,DEF,40,0,0.1,0,624
-236,Dewsbury-Hall,EVE,MID,66,1,5.9,36484,53901
+236,Dewsbury-Hall,EVE,MID,66,1,5.9,36484,53902
 238,Grealish,EVE,MID,65,0,0.5,4303,3285
 239,Garner,EVE,MID,60,0,0.2,2066,2269
 242,George,EVE,MID,55,0,0.9,2750,11866
@@ -306,7 +306,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 264,Bobb,FUL,MID,55,0,0.3,2925,2010
 265,Berge,FUL,MID,49,0,0.3,733,1431
 266,Cairney,FUL,MID,49,0,0.0,13,21
-268,King,FUL,MID,55,0,2.8,115378,22109
+268,King,FUL,MID,55,0,2.8,115382,22109
 269,Sessegnon,FUL,DEF,43,-1,0.3,353,1410
 270,Reed,FUL,MID,44,0,1.1,2991,7495
 271,Muniz,FUL,FWD,54,0,0.4,1979,2921
@@ -318,7 +318,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 626,Zepa,FUL,MID,44,-1,0.3,1230,2465
 635,Larsson,FUL,MID,50,0,0.0,103,77
 636,Ángel,FUL,MID,50,0,0.0,36,29
-650,Affengruber,FUL,DEF,45,0,0.1,9736,2267
+650,Affengruber,FUL,DEF,45,0,0.1,9737,2267
 240,Iroegbunam,HUL,MID,50,0,0.0,83,146
 273,Phillips,HUL,GK,40,0,1.4,3354,4001
 274,Butland,HUL,GK,44,-1,0.1,73,345
@@ -447,7 +447,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 365,Ramsay,LIV,DEF,40,0,0.1,0,526
 366,Wirtz,LIV,MID,73,0,5.7,5237,45806
 367,Gakpo,LIV,MID,72,0,12.1,52442,113776
-368,Szoboszlai,LIV,MID,69,-1,32.5,40992,238416
+368,Szoboszlai,LIV,MID,69,-1,32.5,40993,238418
 369,Ngumoha,LIV,MID,57,-1,0.5,894,4572
 370,Chiesa,LIV,MID,53,-1,0.0,17,268
 371,Gravenberch,LIV,MID,58,-1,1.1,1360,9695
@@ -458,7 +458,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 376,Bajcetic,LIV,MID,50,0,0.0,0,3
 377,Munoz,LIV,MID,65,0,0.9,1702,12331
 378,McConnell,LIV,MID,44,0,0.2,1110,1626
-379,Isak,LIV,FWD,91,0,22.1,120862,110248
+379,Isak,LIV,FWD,91,0,22.1,120863,110248
 380,Ekitiké,LIV,FWD,74,0,0.1,427,910
 381,Koumas,LIV,MID,50,0,0.0,187,206
 382,Danns,LIV,FWD,45,0,0.2,3825,2615
@@ -473,15 +473,15 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 388,Guéhi,MCI,DEF,60,0,18.1,26078,57483
 389,Matheus N.,MCI,DEF,59,0,1.0,1865,3254
 390,Rúben,MCI,DEF,55,0,1.9,5164,9860
-391,Gvardiol,MCI,DEF,57,0,26.9,162876,64479
+391,Gvardiol,MCI,DEF,57,0,26.9,162876,64480
 392,Aït-Nouri,MCI,DEF,52,-1,0.4,571,2348
 393,Khusanov,MCI,DEF,54,0,1.4,1558,9598
 394,Alleyne,MCI,DEF,50,0,0.0,0,20
 395,Lewis,MCI,DEF,44,0,0.2,347,1298
 396,Vitor Reis,MCI,DEF,45,0,0.0,80,165
-397,Semenyo,MCI,MID,84,0,15.1,129375,89035
+397,Semenyo,MCI,MID,84,0,15.1,129375,89036
 398,Foden,MCI,MID,69,0,1.8,233,30927
-399,Cherki,MCI,MID,78,0,28.4,140571,102419
+399,Cherki,MCI,MID,78,0,28.4,140572,102420
 400,Doku,MCI,MID,74,0,0.7,5217,2339
 402,Rodrigo,MCI,MID,65,0,0.0,0,28
 404,Reijnders,MCI,MID,60,0,0.0,0,110
@@ -516,8 +516,8 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 423,Shaw,MUN,DEF,43,-1,7.6,4484,82343
 424,Amass,MUN,DEF,40,0,0.2,450,852
 425,Fredricson,MUN,DEF,40,0,0.0,0,55
-426,B.Fernandes,MUN,MID,119,-1,38.4,53238,213119
-427,Mbeumo,MUN,MID,79,0,20.5,44863,143397
+426,B.Fernandes,MUN,MID,119,-1,38.4,53239,213120
+427,Mbeumo,MUN,MID,79,0,20.5,44864,143397
 428,Cunha,MUN,MID,79,0,5.8,26198,24145
 429,Rashford,MUN,MID,70,0,1.4,4338,19622
 430,Mount,MUN,MID,54,0,0.0,203,209
@@ -540,7 +540,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 446,Schär,NEW,DEF,49,0,0.2,643,991
 447,Botman,NEW,DEF,50,0,0.7,5532,3467
 448,Burn,NEW,DEF,48,-1,0.7,126,6370
-449,Hall,NEW,DEF,53,1,17.6,274318,25238
+449,Hall,NEW,DEF,53,1,17.6,274319,25238
 450,Livramento,NEW,DEF,49,0,0.1,469,1651
 451,A.Murphy,NEW,DEF,40,0,0.1,0,320
 453,Barnes,NEW,MID,61,1,5.9,182187,27004
@@ -603,7 +603,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 455,Tonali,TOT,MID,53,-1,1.8,2585,16406
 494,Vicario,TOT,GK,45,0,0.1,0,771
 495,Austin,TOT,GK,40,0,1.0,2142,2368
-496,Kinsky,TOT,GK,45,0,17.2,21544,123116
+496,Kinsky,TOT,GK,45,0,17.2,21545,123116
 497,Dubravka,TOT,GK,40,0,17.1,31172,53973
 498,Senesi,TOT,DEF,58,0,3.5,1345,23253
 499,Pedro Porro,TOT,DEF,54,0,7.5,1784,82430
@@ -652,7 +652,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 541,Meunier,SUN,DEF,45,0,0.3,1872,1024
 542,E.Le Fée,SUN,MID,57,-1,3.3,12910,26989
 543,Diarra,SUN,MID,53,-1,0.0,20,261
-544,Xhaka,SUN,MID,55,0,3.6,6934,25307
+544,Xhaka,SUN,MID,55,0,3.6,6934,25308
 545,Sadiki,SUN,MID,49,0,0.2,441,1487
 546,Adingra,SUN,MID,49,0,0.0,0,204
 547,Mundle,SUN,MID,49,0,0.0,11,59
