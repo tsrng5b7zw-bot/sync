@@ -1,14 +1,14 @@
 id,web_name,team,pos,owners,managers
 411,Haaland,MCI,FWD,9,m7aa0f2c4; md5c7b575; m70cc7b6a; m8ecfbe9b; m443e673f; mf01a73a8; m6b5b9e77; m5cc3fdda; m05e097b2
-154,Palmer,CHE,MID,8,m7aa0f2c4; m70cc7b6a; m443e673f; mac751a52; mf01a73a8; m6b5b9e77; m05e097b2; mb3da25ed
+154,Palmer,CHE,MID,8,m7aa0f2c4; m70cc7b6a; m443e673f; mf01a73a8; mac751a52; m6b5b9e77; m05e097b2; mb3da25ed
 1,Raya,ARS,GK,7,m7aa0f2c4; md5c7b575; m70cc7b6a; m8ecfbe9b; m443e673f; mac751a52; m6b5b9e77
 8,Calafiori,ARS,DEF,7,m7aa0f2c4; m70cc7b6a; m443e673f; mf01a73a8; m6b5b9e77; m5cc3fdda; m05e097b2
 368,Szoboszlai,LIV,MID,7,m7aa0f2c4; md5c7b575; m8ecfbe9b; m443e673f; m6b5b9e77; m05e097b2; mb3da25ed
-165,João Pedro,CHE,FWD,6,m70cc7b6a; m8ecfbe9b; mac751a52; mf01a73a8; m6b5b9e77; m05e097b2
+165,João Pedro,CHE,FWD,6,m70cc7b6a; m8ecfbe9b; mf01a73a8; mac751a52; m6b5b9e77; m05e097b2
 229,Tarkowski,EVE,DEF,5,m7aa0f2c4; m70cc7b6a; m443e673f; mf01a73a8; mb3da25ed
 115,De Cuyper,BHA,DEF,5,m7aa0f2c4; m70cc7b6a; m8ecfbe9b; m6b5b9e77; m05e097b2
 388,Guéhi,MCI,DEF,4,m7aa0f2c4; m8ecfbe9b; mac751a52; mb3da25ed
-40,Rogers,CHE,MID,4,m7aa0f2c4; m443e673f; mac751a52; mf01a73a8
+40,Rogers,CHE,MID,4,m7aa0f2c4; m443e673f; mf01a73a8; mac751a52
 399,Cherki,MCI,MID,4,m7aa0f2c4; m8ecfbe9b; m6b5b9e77; mb3da25ed
 346,Calvert-Lewin,LEE,FWD,4,m7aa0f2c4; md5c7b575; m443e673f; m6b5b9e77
 15,Ødegaard,ARS,MID,4,m70cc7b6a; mf01a73a8; m6b5b9e77; m5cc3fdda
@@ -28,8 +28,8 @@ id,web_name,team,pos,owners,managers
 112,Van Hecke,TOT,DEF,2,md5c7b575; m5cc3fdda
 391,Gvardiol,MCI,DEF,2,m70cc7b6a; m05e097b2
 557,Tzolis,ARS,MID,2,m8ecfbe9b; mb3da25ed
-464,Wissa,NEW,FWD,2,mac751a52; m5cc3fdda
 51,George Hemmings,AVL,MID,2,mf01a73a8; m5cc3fdda
+464,Wissa,NEW,FWD,2,mac751a52; m5cc3fdda
 367,Gakpo,LIV,MID,2,m5cc3fdda; m05e097b2
 58,Forster,BOU,GK,1,m7aa0f2c4
 272,Kusi-Asare,FUL,FWD,1,m7aa0f2c4
@@ -47,14 +47,14 @@ id,web_name,team,pos,owners,managers
 88,Kayode,BRE,DEF,1,m443e673f
 94,Schade,BRE,MID,1,m443e673f
 194,Thomas-Asante,COV,FWD,1,m443e673f
+649,Maitland-Niles,EVE,DEF,1,mf01a73a8
+441,Obi,MUN,FWD,1,mf01a73a8
 427,Mbeumo,MUN,MID,1,mac751a52
 268,King,FUL,MID,1,mac751a52
 379,Isak,LIV,FWD,1,mac751a52
 503,Van de Ven,TOT,DEF,1,mac751a52
 482,Hudson-Odoi,NFO,MID,1,mac751a52
 32,Cash,AVL,DEF,1,mac751a52
-649,Maitland-Niles,EVE,DEF,1,mf01a73a8
-441,Obi,MUN,FWD,1,mf01a73a8
 175,van Ewijk,COV,DEF,1,m6b5b9e77
 454,Elanga,NEW,MID,1,m6b5b9e77
 586,Mendy,HUL,DEF,1,m5cc3fdda
