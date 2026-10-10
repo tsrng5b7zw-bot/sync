@@ -49,7 +49,7 @@ id,event,kickoff_time,team_h,team_a,team_h_difficulty,team_a_difficulty,started,
 44,5,2026-09-20T13:00:00Z,LEE,CRY,2,3,True,True,90,0,0
 45,5,2026-09-20T13:00:00Z,MCI,SUN,3,5,True,True,90,5,3
 50,5,2026-09-20T15:30:00Z,FUL,MUN,4,3,True,True,90,1,1
-51,6,2026-10-10T11:30:00Z,ARS,LEE,3,5,False,False,0,,
+51,6,2026-10-10T11:30:00Z,ARS,LEE,3,5,True,False,21,0,0
 52,6,2026-10-10T14:00:00Z,AVL,BRE,3,3,False,False,0,,
 53,6,2026-10-10T14:00:00Z,CHE,BOU,3,4,False,False,0,,
 57,6,2026-10-10T14:00:00Z,IPS,FUL,2,2,False,False,0,,
