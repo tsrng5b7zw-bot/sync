@@ -147,10 +147,10 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 134,Oriola,BHA,MID,44,-1,0.2,876,2628
 135,Yohanna,BHA,MID,48,-1,0.0,33,707
 137,Tzimas,BHA,FWD,54,0,0.0,58,92
-138,Kostoulas,BHA,FWD,56,1,8.4,775248,65118
+138,Kostoulas,BHA,FWD,56,1,8.5,775248,65118
 139,Ferguson,BHA,FWD,50,0,0.0,225,374
 328,Struijk,BHA,DEF,49,0,0.2,697,2041
-504,Vuskovic,BHA,DEF,50,0,4.2,136875,37931
+504,Vuskovic,BHA,DEF,50,0,4.3,136875,37931
 594,David,BHA,FWD,59,-1,0.2,4729,3484
 600,Osman,BHA,MID,50,0,0.0,160,203
 605,Yalcouyé,BHA,MID,45,0,3.9,54599,66286
@@ -311,7 +311,7 @@ id,web_name,team,pos,now_cost,cost_change_event,selected_by_percent,transfers_in
 270,Reed,FUL,MID,44,0,1.1,4439,13771
 271,Muniz,FUL,FWD,54,0,0.4,4301,5077
 272,Kusi-Asare,FUL,FWD,45,0,5.1,23027,71519
-569,Gonzalo,FUL,FWD,61,1,7.3,473373,76440
+569,Gonzalo,FUL,FWD,61,1,7.5,473373,76440
 570,Palacios,FUL,MID,54,0,0.2,1383,1869
 580,Charles,FUL,MID,50,0,0.1,3867,1243
 610,De Fougerolles,FUL,DEF,40,0,0.1,0,655

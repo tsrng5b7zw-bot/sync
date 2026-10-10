@@ -426,6 +426,7 @@ entries/m05e097b2/picks_gw2.json
 entries/m05e097b2/picks_gw3.json
 entries/m05e097b2/picks_gw4.json
 entries/m05e097b2/picks_gw5.json
+entries/m05e097b2/picks_gw6.json
 entries/m05e097b2/transfers.json
 entries/m443e673f/history.json
 entries/m443e673f/picks_gw1.json
@@ -482,6 +483,7 @@ entries/mb3da25ed/picks_gw2.json
 entries/mb3da25ed/picks_gw3.json
 entries/mb3da25ed/picks_gw4.json
 entries/mb3da25ed/picks_gw5.json
+entries/mb3da25ed/picks_gw6.json
 entries/mb3da25ed/transfers.json
 entries/md5c7b575/history.json
 entries/md5c7b575/picks_gw1.json
