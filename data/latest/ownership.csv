@@ -1,22 +1,22 @@
 id,web_name,team,pos,owners,managers
-411,Haaland,MCI,FWD,9,m7aa0f2c4; m70cc7b6a; md5c7b575; m8ecfbe9b; m443e673f; mf01a73a8; m6b5b9e77; m05e097b2; m5cc3fdda
-154,Palmer,CHE,MID,8,m7aa0f2c4; m70cc7b6a; mac751a52; m443e673f; mf01a73a8; m6b5b9e77; m05e097b2; mb3da25ed
+411,Haaland,MCI,FWD,9,m7aa0f2c4; m70cc7b6a; md5c7b575; m8ecfbe9b; mf01a73a8; m443e673f; m6b5b9e77; m05e097b2; m5cc3fdda
+154,Palmer,CHE,MID,8,m7aa0f2c4; m70cc7b6a; mac751a52; mf01a73a8; m443e673f; m6b5b9e77; m05e097b2; mb3da25ed
 1,Raya,ARS,GK,7,m7aa0f2c4; m70cc7b6a; md5c7b575; m8ecfbe9b; mac751a52; m443e673f; m6b5b9e77
-8,Calafiori,ARS,DEF,7,m7aa0f2c4; m70cc7b6a; m443e673f; mf01a73a8; m6b5b9e77; m05e097b2; m5cc3fdda
+8,Calafiori,ARS,DEF,7,m7aa0f2c4; m70cc7b6a; mf01a73a8; m443e673f; m6b5b9e77; m05e097b2; m5cc3fdda
 368,Szoboszlai,LIV,MID,7,m7aa0f2c4; md5c7b575; m8ecfbe9b; m443e673f; m6b5b9e77; m05e097b2; mb3da25ed
 165,João Pedro,CHE,FWD,6,m70cc7b6a; m8ecfbe9b; mac751a52; mf01a73a8; m6b5b9e77; m05e097b2
-229,Tarkowski,EVE,DEF,5,m7aa0f2c4; m70cc7b6a; m443e673f; mf01a73a8; mb3da25ed
+229,Tarkowski,EVE,DEF,5,m7aa0f2c4; m70cc7b6a; mf01a73a8; m443e673f; mb3da25ed
 115,De Cuyper,BHA,DEF,5,m7aa0f2c4; m70cc7b6a; m8ecfbe9b; m6b5b9e77; m05e097b2
 388,Guéhi,MCI,DEF,4,m7aa0f2c4; m8ecfbe9b; mac751a52; mb3da25ed
-40,Rogers,CHE,MID,4,m7aa0f2c4; mac751a52; m443e673f; mf01a73a8
+40,Rogers,CHE,MID,4,m7aa0f2c4; mac751a52; mf01a73a8; m443e673f
 399,Cherki,MCI,MID,4,m7aa0f2c4; m8ecfbe9b; m6b5b9e77; mb3da25ed
 346,Calvert-Lewin,LEE,FWD,4,m7aa0f2c4; md5c7b575; m443e673f; m6b5b9e77
 15,Ødegaard,ARS,MID,4,m70cc7b6a; mf01a73a8; m6b5b9e77; m5cc3fdda
 109,Verbruggen,BHA,GK,4,m70cc7b6a; mf01a73a8; m6b5b9e77; m5cc3fdda
 57,Petrović,BOU,GK,4,m8ecfbe9b; mac751a52; m05e097b2; mb3da25ed
 124,Groß,BHA,MID,3,m70cc7b6a; md5c7b575; m443e673f
-277,Egan,HUL,DEF,3,m70cc7b6a; m443e673f; mf01a73a8
-572,Tzolakis,HUL,GK,3,md5c7b575; m443e673f; mf01a73a8
+277,Egan,HUL,DEF,3,m70cc7b6a; mf01a73a8; m443e673f
+572,Tzolakis,HUL,GK,3,md5c7b575; mf01a73a8; m443e673f
 449,Hall,NEW,DEF,3,m8ecfbe9b; m443e673f; m6b5b9e77
 4,Gabriel,ARS,DEF,3,m8ecfbe9b; mac751a52; mb3da25ed
 356,Virgil,LIV,DEF,3,mac751a52; m05e097b2; mb3da25ed
@@ -50,11 +50,11 @@ id,web_name,team,pos,owners,managers
 503,Van de Ven,TOT,DEF,1,mac751a52
 482,Hudson-Odoi,NFO,MID,1,mac751a52
 32,Cash,AVL,DEF,1,mac751a52
+649,Maitland-Niles,EVE,DEF,1,mf01a73a8
+441,Obi,MUN,FWD,1,mf01a73a8
 88,Kayode,BRE,DEF,1,m443e673f
 94,Schade,BRE,MID,1,m443e673f
 194,Thomas-Asante,COV,FWD,1,m443e673f
-649,Maitland-Niles,EVE,DEF,1,mf01a73a8
-441,Obi,MUN,FWD,1,mf01a73a8
 175,van Ewijk,COV,DEF,1,m6b5b9e77
 454,Elanga,NEW,MID,1,m6b5b9e77
 646,Fofana,SUN,MID,1,m05e097b2
