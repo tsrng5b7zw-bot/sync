@@ -1,10 +1,10 @@
 id,web_name,team,pos,owners,managers
-411,Haaland,MCI,FWD,9,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; mf01a73a8; md5c7b575; m443e673f; m6b5b9e77; m05e097b2; m5cc3fdda
-154,Palmer,CHE,MID,8,m70cc7b6a; m7aa0f2c4; mf01a73a8; m443e673f; m6b5b9e77; mac751a52; m05e097b2; mb3da25ed
-165,João Pedro,CHE,FWD,8,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; mf01a73a8; m443e673f; m6b5b9e77; mac751a52; m05e097b2
-1,Raya,ARS,GK,7,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; md5c7b575; m443e673f; m6b5b9e77; mac751a52
-8,Calafiori,ARS,DEF,7,m70cc7b6a; m7aa0f2c4; mf01a73a8; m443e673f; m6b5b9e77; m05e097b2; m5cc3fdda
-115,De Cuyper,BHA,DEF,7,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; mf01a73a8; m443e673f; m6b5b9e77; m05e097b2
+411,Haaland,MCI,FWD,9,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; mf01a73a8; md5c7b575; m6b5b9e77; m443e673f; m05e097b2; m5cc3fdda
+154,Palmer,CHE,MID,8,m70cc7b6a; m7aa0f2c4; mf01a73a8; m6b5b9e77; m443e673f; mac751a52; m05e097b2; mb3da25ed
+165,João Pedro,CHE,FWD,8,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; mf01a73a8; m6b5b9e77; m443e673f; mac751a52; m05e097b2
+1,Raya,ARS,GK,7,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; md5c7b575; m6b5b9e77; m443e673f; mac751a52
+8,Calafiori,ARS,DEF,7,m70cc7b6a; m7aa0f2c4; mf01a73a8; m6b5b9e77; m443e673f; m05e097b2; m5cc3fdda
+115,De Cuyper,BHA,DEF,7,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; mf01a73a8; m6b5b9e77; m443e673f; m05e097b2
 399,Cherki,MCI,MID,6,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; m6b5b9e77; mac751a52; mb3da25ed
 229,Tarkowski,EVE,DEF,5,m70cc7b6a; m7aa0f2c4; mf01a73a8; m443e673f; mb3da25ed
 368,Szoboszlai,LIV,MID,5,m8ecfbe9b; md5c7b575; m6b5b9e77; m05e097b2; mb3da25ed
@@ -17,7 +17,7 @@ id,web_name,team,pos,owners,managers
 277,Egan,HUL,DEF,3,m70cc7b6a; mf01a73a8; m443e673f
 4,Gabriel,ARS,DEF,3,m8ecfbe9b; mac751a52; mb3da25ed
 572,Tzolakis,HUL,GK,3,mf01a73a8; md5c7b575; m443e673f
-346,Calvert-Lewin,LEE,FWD,3,md5c7b575; m443e673f; m6b5b9e77
+346,Calvert-Lewin,LEE,FWD,3,md5c7b575; m6b5b9e77; m443e673f
 356,Virgil,LIV,DEF,3,mac751a52; m05e097b2; mb3da25ed
 391,Gvardiol,MCI,DEF,2,m70cc7b6a; m05e097b2
 286,Belloumi,HUL,MID,2,m70cc7b6a; m7aa0f2c4
@@ -45,10 +45,10 @@ id,web_name,team,pos,owners,managers
 566,Silva,BOU,DEF,1,md5c7b575
 68,Tavernier,BOU,MID,1,md5c7b575
 651,J.Angulo,SUN,FWD,1,md5c7b575
+454,Elanga,NEW,MID,1,m6b5b9e77
 94,Schade,BRE,MID,1,m443e673f
 88,Kayode,BRE,DEF,1,m443e673f
 323,McAteer,IPS,MID,1,m443e673f
-454,Elanga,NEW,MID,1,m6b5b9e77
 427,Mbeumo,MUN,MID,1,mac751a52
 268,King,FUL,MID,1,mac751a52
 166,N.Jackson,AVL,FWD,1,mac751a52
