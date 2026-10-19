@@ -378,11 +378,13 @@ elements/608.json
 elements/61.json
 elements/611.json
 elements/612.json
+elements/613.json
 elements/614.json
 elements/616.json
 elements/617.json
 elements/618.json
 elements/619.json
+elements/62.json
 elements/620.json
 elements/621.json
 elements/622.json
@@ -411,6 +413,7 @@ elements/651.json
 elements/656.json
 elements/66.json
 elements/662.json
+elements/668.json
 elements/67.json
 elements/68.json
 elements/69.json
@@ -422,6 +425,7 @@ elements/73.json
 elements/74.json
 elements/75.json
 elements/76.json
+elements/77.json
 elements/79.json
 elements/8.json
 elements/81.json
