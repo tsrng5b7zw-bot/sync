@@ -60,6 +60,7 @@ elements/17.json
 elements/173.json
 elements/175.json
 elements/176.json
+elements/177.json
 elements/179.json
 elements/182.json
 elements/183.json
@@ -295,6 +296,7 @@ elements/502.json
 elements/503.json
 elements/504.json
 elements/506.json
+elements/508.json
 elements/51.json
 elements/512.json
 elements/514.json
@@ -303,6 +305,7 @@ elements/516.json
 elements/519.json
 elements/52.json
 elements/520.json
+elements/521.json
 elements/522.json
 elements/523.json
 elements/525.json
