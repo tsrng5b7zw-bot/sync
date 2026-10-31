@@ -79,7 +79,7 @@ id,event,kickoff_time,team_h,team_a,team_h_difficulty,team_a_difficulty,started,
 78,8,2026-10-25T14:00:00Z,LIV,BHA,3,4,True,True,90,2,0
 79,8,2026-10-25T14:00:00Z,MUN,BOU,3,4,True,True,90,0,3
 80,8,2026-10-25T16:30:00Z,SUN,LEE,3,3,True,True,90,0,0
-84,9,2026-10-31T12:30:00Z,CHE,MUN,4,4,False,False,0,,
+84,9,2026-10-31T12:30:00Z,CHE,MUN,4,4,True,False,27,0,0
 82,9,2026-10-31T15:00:00Z,BOU,LEE,3,3,False,False,0,,
 83,9,2026-10-31T15:00:00Z,BRE,NFO,3,3,False,False,0,,
 85,9,2026-10-31T15:00:00Z,COV,SUN,3,2,False,False,0,,
