@@ -1,9 +1,9 @@
 id,web_name,team,pos,owners,managers
-411,Haaland,MCI,FWD,10,m70cc7b6a; m7aa0f2c4; md5c7b575; m8ecfbe9b; m6b5b9e77; mac751a52; m443e673f; mf01a73a8; m05e097b2; m5cc3fdda
+411,Haaland,MCI,FWD,10,m70cc7b6a; m7aa0f2c4; md5c7b575; m8ecfbe9b; m6b5b9e77; mac751a52; m443e673f; mf01a73a8; m5cc3fdda; m05e097b2
 1,Raya,ARS,GK,7,m70cc7b6a; m7aa0f2c4; md5c7b575; m8ecfbe9b; m6b5b9e77; mac751a52; m443e673f
 154,Palmer,CHE,MID,7,m70cc7b6a; m7aa0f2c4; m6b5b9e77; mac751a52; m443e673f; mf01a73a8; mb3da25ed
 115,De Cuyper,BHA,DEF,7,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; m6b5b9e77; m443e673f; mf01a73a8; m05e097b2
-8,Calafiori,ARS,DEF,7,m70cc7b6a; m7aa0f2c4; mac751a52; m443e673f; mf01a73a8; m05e097b2; m5cc3fdda
+8,Calafiori,ARS,DEF,7,m70cc7b6a; m7aa0f2c4; mac751a52; m443e673f; mf01a73a8; m5cc3fdda; m05e097b2
 40,Rogers,CHE,MID,6,m7aa0f2c4; md5c7b575; mac751a52; m443e673f; mf01a73a8; m05e097b2
 229,Tarkowski,EVE,DEF,5,m70cc7b6a; m7aa0f2c4; m443e673f; mf01a73a8; mb3da25ed
 399,Cherki,MCI,MID,5,m70cc7b6a; m7aa0f2c4; m8ecfbe9b; m6b5b9e77; mb3da25ed
@@ -33,7 +33,7 @@ id,web_name,team,pos,owners,managers
 557,Tzolis,ARS,MID,2,m8ecfbe9b; mb3da25ed
 464,Wissa,NEW,FWD,2,mac751a52; m5cc3fdda
 51,George Hemmings,AVL,MID,2,mf01a73a8; m5cc3fdda
-367,Gakpo,LIV,MID,2,m05e097b2; m5cc3fdda
+367,Gakpo,LIV,MID,2,m5cc3fdda; m05e097b2
 330,Bogle,LEE,DEF,1,m70cc7b6a
 286,Belloumi,HUL,MID,1,m70cc7b6a
 169,Mheuka,CHE,FWD,1,m70cc7b6a
@@ -58,17 +58,17 @@ id,web_name,team,pos,owners,managers
 12,Saka,ARS,MID,1,mf01a73a8
 173,Thomas,COV,DEF,1,mf01a73a8
 441,Obi,MUN,FWD,1,mf01a73a8
-391,Gvardiol,MCI,DEF,1,m05e097b2
-279,Ajayi,HUL,DEF,1,m05e097b2
-78,Kroupi.Jr,BOU,MID,1,m05e097b2
-569,Gonzalo,FUL,FWD,1,m05e097b2
-111,Steele,BHA,GK,1,m05e097b2
 586,Mendy,HUL,DEF,1,m5cc3fdda
 418,Maguire,MUN,DEF,1,m5cc3fdda
 397,Semenyo,MCI,MID,1,m5cc3fdda
 167,Delap,NFO,FWD,1,m5cc3fdda
 495,Austin,TOT,GK,1,m5cc3fdda
 201,Muñoz,NFO,DEF,1,m5cc3fdda
+391,Gvardiol,MCI,DEF,1,m05e097b2
+279,Ajayi,HUL,DEF,1,m05e097b2
+78,Kroupi.Jr,BOU,MID,1,m05e097b2
+569,Gonzalo,FUL,FWD,1,m05e097b2
+111,Steele,BHA,GK,1,m05e097b2
 28,Martinez,CHE,GK,1,mb3da25ed
 200,Lacroix,CHE,DEF,1,mb3da25ed
 155,Enzo,MCI,MID,1,mb3da25ed
