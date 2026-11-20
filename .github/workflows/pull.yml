@@ -2,11 +2,11 @@ name: Pull data
 
 on:
   schedule:
-    # hourly at :17 past, and again at :47: GitHub drops or delays scheduled runs under load
-    # (gaps of 4-8 hours were seen on 3-4 Oct 2026), so two chances an hour keep the data fresh;
-    # the concurrency group stops the two from overlapping
-    - cron: "17 * * * *"
-    - cron: "47 * * * *"
+    # six chances an hour: GitHub drops or delays scheduled runs under load (gaps of 4-8 hours
+    # were seen on 3-4 Oct 2026, and only about one run in five started from 21 Oct 2026);
+    # the Commit step keeps at most about two commits an hour, and the concurrency group
+    # stops runs from overlapping
+    - cron: "7,17,27,37,47,57 * * * *"
     # daily per-player histories at 06:40 UTC
     - cron: "40 6 * * *"
   workflow_dispatch:
@@ -42,6 +42,12 @@ jobs:
         run: python collector/pull.py --elements
       - name: Commit
         run: |
+          # an ordinary scheduled run that lands within 25 minutes of the last commit does not
+          # commit, so six chances an hour still mean at most about two commits an hour
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "40 6 * * *" ] && [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -lt 1500 ]; then
+            echo "last commit is recent: nothing committed"
+            exit 0
+          fi
           git config user.name "fpl-bot"
           git config user.email "fpl-bot@users.noreply.github.com"
           git add -A data
