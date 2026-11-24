@@ -108,7 +108,7 @@ id,event,kickoff_time,team_h,team_a,team_h_difficulty,team_a_difficulty,started,
 109,11,2026-11-21T17:30:00Z,NEW,ARS,4,3,True,False,90,2,2
 106,11,2026-11-22T14:00:00Z,HUL,BHA,4,2,True,False,90,2,0
 107,11,2026-11-22T16:30:00Z,LIV,MUN,3,4,True,False,90,4,0
-103,11,2026-11-23T20:00:00Z,BRE,EVE,3,4,False,False,0,,
+103,11,2026-11-23T20:00:00Z,BRE,EVE,3,4,True,False,90,4,0
 119,12,2026-11-27T20:00:00Z,NFO,CHE,4,2,False,False,0,,
 117,12,2026-11-28T15:00:00Z,LEE,COV,2,3,False,False,0,,
 118,12,2026-11-28T15:00:00Z,MUN,BRE,3,3,False,False,0,,
