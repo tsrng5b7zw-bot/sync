@@ -188,6 +188,7 @@ def main():
     ap.add_argument("--frozen", help="frozen team file for ledger.py benchmark")
     ap.add_argument("--from", dest="start", type=int, default=6, help="first gameweek of the benchmark")
     ap.add_argument("--watch", default="", help="'Name (TEAM);...' extra players for the price and starter checks")
+    ap.add_argument("--restore", default="", help="'Name (TEAM);...' players set back to last week's forecast by repair_projections.py: only when the news explains a short outing")
     ap.add_argument("--data", default="data_pull")
     ap.add_argument("--archive", default="archive", help="where archive_projections.py keeps the dated copies (a path outside the clone survives re-cloning)")
     ap.add_argument("--repo", default="tsrng5b7zw-bot/sync")
@@ -271,6 +272,11 @@ def main():
             blend_inputs.append(f)
         else:
             failures.append(tool)
+    if "proj_open.txt" in blend_inputs or "proj_hgb.txt" in blend_inputs:
+        rc, out, secs = run(["repair_projections.py", "--data", a.data, "--squad", a.squad] + (["--restore", a.restore] if a.restore else []))
+        print(out.strip() if rc == 0 else "! repair_projections.py failed: the models are used as published\n" + tail(out, 3))
+        if rc != 0:
+            failures.append("repair_projections.py")
     if blend_inputs:
         weights = {"proj_open.txt": 2, "proj_house.txt": 1, "proj_hgb.txt": 1}
         w = ",".join(str(weights[f]) for f in blend_inputs) if len(blend_inputs) == 3 else ",".join("1" for _ in blend_inputs)
